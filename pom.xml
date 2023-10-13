@@ -79,7 +79,7 @@
                     <archive>
                         <!-- This sets up the main manifest attribute -->
                         <manifest>
-                            <mainClass>src.test.kotlin.setu.AppKt</mainClass>
+                            <mainClass>src.main.kotlin.setu.AppKt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -134,6 +134,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
