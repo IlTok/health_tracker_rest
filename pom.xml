@@ -79,7 +79,7 @@
                     <archive>
                         <!-- This sets up the main manifest attribute -->
                         <manifest>
-                            <mainClass>src/test/kotlin/setu/App.kt</mainClass>
+                            <mainClass>src\test\kotlin\setu\App.kt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
