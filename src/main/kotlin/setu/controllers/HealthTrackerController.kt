@@ -47,4 +47,13 @@ object HealthTrackerController {
             user = user
         )
     }
+
+    fun getActivitiesByUserId(ctx: Context){}
+    fun deleteActivitiesByUserId(ctx: Context){}
+    fun getActivityById(ctx: Context){}
+    fun deleteActivityById(ctx: Context){}
+    fun updateActivityById(ctx: Context){}
+    fun getAllActivities(ctx: Context){}
+    fun addActivity(ctx: Context){}
+
 }
