@@ -1,11 +1,12 @@
 package setu.domain
 
+import org.joda.time.DateTime
+
 data class Activity(
     var id: Int,
     var description: String,
-    var duration: Int,
+    var duration: Double,
     var calories: Int,
-    var started: Boolean,
-    var userId: Int,
-) {
-}
+    var started: DateTime,
+    var userId: Int
+)

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import setu.domain.User
 import setu.domain.db.Users
-import setu.domain.repository.UserDAO
+import setu.domain.repository.UserDao
 import setu.helpers.users
 import setu.helpers.nonExistingEmail
 
@@ -29,9 +29,9 @@ class UserDaoTest {
         }
     }
 
-    internal fun populateUserTable(): UserDAO {
+    internal fun populateUserTable(): UserDao {
         SchemaUtils.create(Users)
-        val userDAO = UserDAO()
+        val userDAO = UserDao()
         userDAO.save(user1)
         userDAO.save(user2)
         userDAO.save(user3)
@@ -89,7 +89,7 @@ class UserDaoTest {
             transaction {
 
                 SchemaUtils.create(Users)
-                val userDAO = UserDAO()
+                val userDAO = UserDao()
 
                 assertEquals(0, userDAO.getAll().size)
             }
