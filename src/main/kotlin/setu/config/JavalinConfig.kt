@@ -1,8 +1,9 @@
 package setu.config
 
-import setu.controllers.HealthTrackerController
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
+import setu.controllers.ActivityController
+import setu.controllers.UserController
 
 class JavalinConfig {
 
@@ -19,28 +20,28 @@ class JavalinConfig {
     private fun registerRoutes(app: Javalin) {
         app.routes {
             path("/api/users") {
-                get(HealthTrackerController::getAllUsers)
-                post(HealthTrackerController::addUser)
+                get(UserController::getAllUsers)
+                post(UserController::addUser)
                 path("{user-id}") {
-                    get(HealthTrackerController::getUserByUserId)
-                    delete(HealthTrackerController::deleteUserByUserId)
-                    patch(HealthTrackerController::updateUser)
+                    get(UserController::getUserById)
+                    delete(UserController::deleteUserById)
+                    patch(UserController::updateUser)
                     path("/activities"){
-                        get(HealthTrackerController::getActivitiesByUserId)
-                        delete(HealthTrackerController::deleteActivitiesByUserId)
+                        get(ActivityController::getActivitiesByUserId)
+                        delete(ActivityController::deleteActivitiesByUserId)
                     }
                 }
                 path("/email/{email}"){
-                    get(HealthTrackerController::getUserByEmail)
+                    get(UserController::getUserByEmail)
                 }
             }
             path("/api/activities"){
-                get(HealthTrackerController::getAllActivities)
-                post(HealthTrackerController::addActivity)
+                get(ActivityController::getAllActivities)
+                post(ActivityController::addActivity)
                 path("{activity-id}"){
-                    get(HealthTrackerController::getActivityById)
-                    delete(HealthTrackerController::deleteActivityById)
-                    patch(HealthTrackerController::updateActivityById)
+                    get(ActivityController::getActivityById)
+                    delete(ActivityController::deleteActivityById)
+                    patch(ActivityController::updateActivityById)
                 }
             }
         }
