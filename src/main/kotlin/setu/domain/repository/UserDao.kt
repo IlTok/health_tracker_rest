@@ -6,7 +6,7 @@ import setu.domain.User
 import setu.domain.db.Users
 import setu.utils.mapToUser
 
-class UserDAO {
+class UserDao {
 
     fun getAll(): ArrayList<User> {
         val userList: ArrayList<User> = arrayListOf()
