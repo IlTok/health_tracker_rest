@@ -1,40 +1,29 @@
 package setu.controllers
 
-import com.fasterxml.jackson.databind.SerializationFeature
-import io.javalin.http.Context
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.javalin.http.Context
 import setu.domain.Activity
 import setu.domain.repository.ActivityDao
-import com.fasterxml.jackson.datatype.joda.JodaModule
+import setu.utils.getConfigureMapper
 
 object ActivityController {
 
     private val activityDao = ActivityDao()
 
     fun getAllActivities(ctx: Context) {
-        val mapper = jacksonObjectMapper()
-            .registerModule(JodaModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        ctx.json(mapper.writeValueAsString(activityDao.getAll()))
+        ctx.json(getConfigureMapper().writeValueAsString(activityDao.getAll()))
     }
 
     fun getActivitiesByUserId(ctx: Context) {
         val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
         if (activities.isNotEmpty()) {
-            val mapper = jacksonObjectMapper()
-                .registerModule(JodaModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-            ctx.json(mapper.writeValueAsString(activities))
+            ctx.json(getConfigureMapper().writeValueAsString(activities))
         } else
             ctx.json("404")
     }
 
     fun addActivity(ctx: Context) {
-        val mapper = jacksonObjectMapper()
-            .registerModule(JodaModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        val activity = mapper.readValue<Activity>(ctx.body())
+        val activity = getConfigureMapper().readValue<Activity>(ctx.body())
         activityDao.save(activity)
     }
 
@@ -48,10 +37,7 @@ object ActivityController {
     fun getActivityById(ctx: Context) {
         val activities = activityDao.findById(ctx.pathParam("activity-id").toInt())
         if (activities != null) {
-            val mapper = jacksonObjectMapper()
-                .registerModule(JodaModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-            ctx.json(mapper.writeValueAsString(activities))
+            ctx.json(getConfigureMapper().writeValueAsString(activities))
         } else {
             ctx.json("404")
         }
@@ -67,10 +53,7 @@ object ActivityController {
     }
 
     fun updateActivityById(ctx: Context) {
-        val mapper = jacksonObjectMapper()
-            .registerModule(JodaModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        val activity = mapper.readValue<Activity>(ctx.body())
+        val activity = getConfigureMapper().readValue<Activity>(ctx.body())
         if (activityDao.findById(ctx.pathParam("activity-id").toInt()) != null) {
             activityDao.update(ctx.pathParam("activity-id").toInt(), activity)
             ctx.json("200")
