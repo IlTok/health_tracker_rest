@@ -15,12 +15,11 @@ import setu.helpers.nonExistingEmail
 
 class UserDaoTest {
 
-    val user1 = users[0]
-    val user2 = users[1]
-    val user3 = users[2]
+    private val user1 = users[0]
+    private val user2 = users[1]
+    private val user3 = users[2]
 
     companion object {
-
         //Make a connection to a local, in memory H2 database.
         @BeforeAll
         @JvmStatic
@@ -31,11 +30,11 @@ class UserDaoTest {
 
     internal fun populateUserTable(): UserDao {
         SchemaUtils.create(Users)
-        val userDAO = UserDao()
-        userDAO.save(user1)
-        userDAO.save(user2)
-        userDAO.save(user3)
-        return userDAO
+        val userDao = UserDao()
+        userDao.save(user1)
+        userDao.save(user2)
+        userDao.save(user3)
+        return userDao
     }
 
     @Nested
@@ -44,12 +43,12 @@ class UserDaoTest {
         @Test
         fun `multiple users added to table can be retrieved successfully`() {
             transaction {
-                val userDAO = populateUserTable()
+                val userDao = populateUserTable()
 
-                assertEquals(3, userDAO.getAll().size)
-                assertEquals(user1, userDAO.findById(user1.id))
-                assertEquals(user2, userDAO.findById(user2.id))
-                assertEquals(user3, userDAO.findById(user3.id))
+                assertEquals(3, userDao.getAll().size)
+                assertEquals(user1, userDao.findById(user1.id))
+                assertEquals(user2, userDao.findById(user2.id))
+                assertEquals(user3, userDao.findById(user3.id))
             }
         }
     }
@@ -60,58 +59,49 @@ class UserDaoTest {
         @Test
         fun `get all users from a populated table returns all rows`() {
             transaction {
-                val userDAO = populateUserTable()
-
-                assertEquals(3, userDAO.getAll().size)
+                val userDao = populateUserTable()
+                assertEquals(3, userDao.getAll().size)
             }
         }
 
         @Test
         fun `get user by id that doesn't exist, results in no user returned`() {
             transaction {
-                val userDAO = populateUserTable()
-
-                assertEquals(null, userDAO.findById(4))
+                val userDao = populateUserTable()
+                assertEquals(null, userDao.findById(4))
             }
         }
 
         @Test
         fun `get user by id that exists, results in a correct user returned`() {
             transaction {
-                val userDAO = populateUserTable()
-
-                assertEquals(null, userDAO.findById(4))
+                val userDao = populateUserTable()
+                assertEquals(user2, userDao.findById(2))
             }
         }
 
         @Test
         fun `get all users over empty table returns none`() {
             transaction {
-
                 SchemaUtils.create(Users)
-                val userDAO = UserDao()
-
-                assertEquals(0, userDAO.getAll().size)
+                val userDao = UserDao()
+                assertEquals(0, userDao.getAll().size)
             }
         }
 
         @Test
         fun `get user by email that doesn't exist, results in no user returned`() {
             transaction {
-
-                val userDAO = populateUserTable()
-
-                assertEquals(null, userDAO.findByEmail(nonExistingEmail))
+                val userDao = populateUserTable()
+                assertEquals(null, userDao.findByEmail(nonExistingEmail))
             }
         }
 
         @Test
         fun `get user by email that exists, results in correct user returned`() {
             transaction {
-
-                val userDAO = populateUserTable()
-
-                assertEquals(user2, userDAO.findByEmail(user2.email))
+                val userDao = populateUserTable()
+                assertEquals(user2, userDao.findByEmail(user2.email))
             }
         }
     }
@@ -122,22 +112,22 @@ class UserDaoTest {
         @Test
         fun `deleting a non-existant user in table results in no deletion`() {
             transaction {
-                val userDAO = populateUserTable()
+                val userDao = populateUserTable()
 
-                assertEquals(3, userDAO.getAll().size)
-                userDAO.delete(4)
-                assertEquals(3, userDAO.getAll().size)
+                assertEquals(3, userDao.getAll().size)
+                userDao.delete(4)
+                assertEquals(3, userDao.getAll().size)
             }
         }
 
         @Test
         fun `deleting an existing user in table results in record being deleted`() {
             transaction {
-                val userDAO = populateUserTable()
+                val userDao = populateUserTable()
 
-                assertEquals(3, userDAO.getAll().size)
-                userDAO.delete(user3.id)
-                assertEquals(2, userDAO.getAll().size)
+                assertEquals(3, userDao.getAll().size)
+                userDao.delete(user3.id)
+                assertEquals(2, userDao.getAll().size)
             }
         }
     }
@@ -148,25 +138,23 @@ class UserDaoTest {
         @Test
         fun `updating existing user in table results in successful update`() {
             transaction {
-
-                val userDAO = populateUserTable()
+                val userDao = populateUserTable()
 
                 val user3Updated = User(3, "new username", "new@email.ie")
-                userDAO.update(user3.id, user3Updated)
-                assertEquals(user3Updated, userDAO.findById(3))
+                userDao.update(user3.id, user3Updated)
+                assertEquals(user3Updated, userDao.findById(3))
             }
         }
 
         @Test
         fun `updating non-existant user in table results in no updates`() {
             transaction {
-
-                val userDAO = populateUserTable()
+                val userDao = populateUserTable()
 
                 val user4Updated = User(4, "new username", "new@email.ie")
-                userDAO.update(4, user4Updated)
-                assertEquals(null, userDAO.findById(4))
-                assertEquals(3, userDAO.getAll().size)
+                userDao.update(4, user4Updated)
+                assertEquals(null, userDao.findById(4))
+                assertEquals(3, userDao.getAll().size)
             }
         }
     }

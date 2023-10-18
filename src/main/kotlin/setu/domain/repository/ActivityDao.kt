@@ -18,7 +18,7 @@ class ActivityDao {
         return activityList
     }
 
-    fun findByUserId(userDd: Int): ArrayList<Activity> {
+    fun findByUserId(userDd: Int): ArrayList<Activity>? {
         val activityList: ArrayList<Activity> = arrayListOf()
         transaction {
             Activities.select() {
@@ -28,7 +28,7 @@ class ActivityDao {
                     activityList.add(mapToActivity(it))
                 }
         }
-        return activityList
+        return activityList.ifEmpty { null }
     }
 
     fun save(activity: Activity) {

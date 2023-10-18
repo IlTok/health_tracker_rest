@@ -16,7 +16,7 @@ object ActivityController {
 
     fun getActivitiesByUserId(ctx: Context) {
         val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
-        if (activities.isNotEmpty()) {
+        if (!activities.isNullOrEmpty()) {
             ctx.json(getConfigureMapper().writeValueAsString(activities))
         } else
             ctx.json("404")
@@ -28,7 +28,7 @@ object ActivityController {
     }
 
     fun deleteActivitiesByUserId(ctx: Context) {
-        if (activityDao.findByUserId(ctx.pathParam("user-id").toInt()).isNotEmpty())
+        if (!activityDao.findByUserId(ctx.pathParam("user-id").toInt()).isNullOrEmpty())
             activityDao.deleteByUserId(ctx.pathParam("user-id").toInt())
         else
             ctx.json("404")
