@@ -4,17 +4,30 @@ import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import setu.controllers.ActivityController
 import setu.controllers.UserController
+import io.javalin.json.JavalinJackson
+import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
 
-    fun startJavalinService(): Javalin {
-        val app = Javalin.create().apply {
-            exception(Exception::class.java) { e, _ -> e.printStackTrace() }
-            error(404) { ctx -> ctx.json("404") }
-        }.start(getRemoteAssignedPort())
+    val app = Javalin.create {
+        //added this jsonMapper for our integration tests - serialise objects to json
+        it.jsonMapper(JavalinJackson(jsonObjectMapper()))
+    }.apply {
+        exception(Exception::class.java) { e, _ -> e.printStackTrace() }
+        error(404) { ctx -> ctx.json("404 : Not Found") }
+    }
 
+    fun startJavalinService(): Javalin {
+        app.start(getRemoteAssignedPort())
         registerRoutes(app)
         return app
+    }
+
+    private fun getRemoteAssignedPort(): Int {
+        val remotePort = System.getenv("PORT")
+        return if (remotePort != null) {
+            Integer.parseInt(remotePort)
+        } else 7000
     }
 
     private fun registerRoutes(app: Javalin) {
@@ -24,33 +37,26 @@ class JavalinConfig {
                 post(UserController::addUser)
                 path("{user-id}") {
                     get(UserController::getUserById)
-                    delete(UserController::deleteUserById)
+                    delete(UserController::deleteUser)
                     patch(UserController::updateUser)
-                    path("/activities"){
+                    path("/activities") {
                         get(ActivityController::getActivitiesByUserId)
                         delete(ActivityController::deleteActivitiesByUserId)
                     }
                 }
-                path("/email/{email}"){
+                path("/email/{email}") {
                     get(UserController::getUserByEmail)
                 }
             }
-            path("/api/activities"){
+            path("/api/activities") {
                 get(ActivityController::getAllActivities)
                 post(ActivityController::addActivity)
-                path("{activity-id}"){
+                path("{activity-id}") {
                     get(ActivityController::getActivityById)
                     delete(ActivityController::deleteActivityById)
                     patch(ActivityController::updateActivityById)
                 }
             }
         }
-    }
-
-    private fun getRemoteAssignedPort(): Int {
-        val remotePort = System.getenv("PORT")
-        return if (remotePort != null) {
-            Integer.parseInt(remotePort)
-        } else 7000
     }
 }

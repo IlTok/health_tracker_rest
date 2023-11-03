@@ -38,16 +38,16 @@ class UserDao {
         }
     }
 
-    fun save(user: User) {
-        transaction {
+    fun save(user: User): Int {
+        return transaction {
             Users.insert {
                 it[name] = user.name
                 it[email] = user.email
-            }
+            } get Users.id
         }
     }
 
-    fun delete(id: Int) {
+    fun delete(id: Int): Int {
         return transaction {
             Users.deleteWhere {
                 Users.id eq id
@@ -55,8 +55,8 @@ class UserDao {
         }
     }
 
-    fun update(id: Int, user: User) {
-        transaction {
+    fun update(id: Int, user: User): Int {
+        return transaction {
             Users.update({
                 Users.id eq id
             }) {

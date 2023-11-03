@@ -3,6 +3,11 @@ package setu.helpers
 import org.joda.time.DateTime
 import setu.domain.Activity
 
+const val updatedDescription = "Updated Description"
+const val updatedDuration = 30.0
+const val updatedCalories = 945
+val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
+
 val activities = arrayListOf<Activity>(
     Activity(
         description = "Running",
