@@ -28,7 +28,7 @@ class ProductDao {
         }
     }
 
-    fun save(product: Product): String {
+    fun save(product: Product) {
         return transaction {
             Products.insert {
                 it[name] = product.name
@@ -36,7 +36,7 @@ class ProductDao {
                 it[proteins] = product.proteins
                 it[fats] = product.fats
                 it[carbohydrates] = product.carbohydrates
-            } get Products.name
+            }
         }
     }
 
