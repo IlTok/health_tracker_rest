@@ -20,7 +20,7 @@ object ProductController {
     }
 
     fun getProductByName(ctx: Context) {
-        val product = productDao.findByName(ctx.pathParam("name"))
+        val product = productDao.findByName(ctx.pathParam("product-name"))
         if (product != null) {
             ctx.json(product)
             ctx.status(200)
@@ -41,7 +41,7 @@ object ProductController {
     }
 
     fun deleteProduct(ctx: Context){
-        if (productDao.delete(ctx.pathParam("name")) != 0)
+        if (productDao.delete(ctx.pathParam("product-name")) != 0)
             ctx.status(204)
         else
             ctx.status(404)
@@ -49,7 +49,7 @@ object ProductController {
 
     fun updateProduct(ctx: Context){
         val newProduct : Product = jsonToObject(ctx.body())
-        if ((productDao.update(name = ctx.pathParam("user-id"), product = newProduct)) != 0)
+        if ((productDao.update(name = ctx.pathParam("product-name"), product = newProduct)) != 0)
             ctx.status(204)
         else
             ctx.status(404)
