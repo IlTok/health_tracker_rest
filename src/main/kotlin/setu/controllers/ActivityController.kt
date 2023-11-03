@@ -1,64 +1,86 @@
 package setu.controllers
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.javalin.http.Context
 import setu.domain.Activity
 import setu.domain.repository.ActivityDao
-import setu.utils.getConfigureMapper
+import setu.domain.repository.UserDao
+import setu.utils.jsonToObject
 
 object ActivityController {
 
     private val activityDao = ActivityDao()
+    private val userDao = UserDao()
 
     fun getAllActivities(ctx: Context) {
-        ctx.json(getConfigureMapper().writeValueAsString(activityDao.getAll()))
+        val activities = activityDao.getAll()
+        if (activities.size != 0) {
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+        ctx.json(activities)
     }
 
     fun getActivitiesByUserId(ctx: Context) {
-        val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
-        if (!activities.isNullOrEmpty()) {
-            ctx.json(getConfigureMapper().writeValueAsString(activities))
-        } else
-            ctx.json("404")
-    }
-
-    fun addActivity(ctx: Context) {
-        val activity = getConfigureMapper().readValue<Activity>(ctx.body())
-        activityDao.save(activity)
-    }
-
-    fun deleteActivitiesByUserId(ctx: Context) {
-        if (!activityDao.findByUserId(ctx.pathParam("user-id").toInt()).isNullOrEmpty())
-            activityDao.deleteByUserId(ctx.pathParam("user-id").toInt())
-        else
-            ctx.json("404")
+        if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
+            val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
+            if (activities.isNotEmpty()) {
+                ctx.json(activities)
+                ctx.status(200)
+            } else {
+                ctx.status(404)
+            }
+        } else {
+            ctx.status(404)
+        }
     }
 
     fun getActivityById(ctx: Context) {
-        val activities = activityDao.findById(ctx.pathParam("activity-id").toInt())
-        if (activities != null) {
-            ctx.json(getConfigureMapper().writeValueAsString(activities))
+        val activity = activityDao.findById((ctx.pathParam("activity-id").toInt()))
+        if (activity != null) {
+            ctx.json(activity)
+            ctx.status(200)
         } else {
-            ctx.json("404")
+            ctx.status(404)
+        }
+    }
+
+    fun addActivity(ctx: Context) {
+        val activity: Activity = jsonToObject(ctx.body())
+        val userId = userDao.findById(activity.userId)
+        if (userId != null) {
+            val activityId = activityDao.save(activity)
+            activity.id = activityId
+            ctx.json(activity)
+            ctx.status(201)
+        } else {
+            ctx.status(404)
         }
     }
 
     fun deleteActivityById(ctx: Context) {
-        if (activityDao.findById(ctx.pathParam("activity-id").toInt()) != null) {
-            activityDao.deleteById(ctx.pathParam("activity-id").toInt())
-            ctx.json("200")
-        } else {
-            ctx.json("404")
-        }
+        if (activityDao.deleteById(ctx.pathParam("activity-id").toInt()) != 0)
+            ctx.status(204)
+        else
+            ctx.status(404)
+    }
+
+    fun deleteActivitiesByUserId(ctx: Context) {
+        if (activityDao.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
+            ctx.status(204)
+        else
+            ctx.status(404)
     }
 
     fun updateActivityById(ctx: Context) {
-        val activity = getConfigureMapper().readValue<Activity>(ctx.body())
-        if (activityDao.findById(ctx.pathParam("activity-id").toInt()) != null) {
-            activityDao.update(ctx.pathParam("activity-id").toInt(), activity)
-            ctx.json("200")
-        } else {
-            ctx.json("404")
-        }
+        val activity: Activity = jsonToObject(ctx.body())
+        if (activityDao.update(
+                id = ctx.pathParam("activity-id").toInt(),
+                activity = activity
+            ) != 0
+        )
+            ctx.status(204)
+        else
+            ctx.status(404)
     }
 }

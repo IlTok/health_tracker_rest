@@ -2,9 +2,11 @@ package setu.helpers
 
 import setu.domain.User
 
-val nonExistingEmail = "thisemaildoesntexist@gmuil.cim"
-val validName = "Test User 1"
-val validEmail = "testuser1@test.com"
+const val nonExistingEmail = "thisemaildoesntexist@gmuil.cim"
+const val validName = "Test User 1"
+const val validEmail = "testuser1@test.com"
+const val updatedName = "Updated Name"
+const val updatedEmail = "Updated Email"
 
 val users = arrayListOf<User>(
     User(name = "Alice Wonderland", email = "alice@wonderland.com", id = 1),

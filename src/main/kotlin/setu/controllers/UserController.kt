@@ -1,56 +1,64 @@
 package setu.controllers
 
 import io.javalin.http.Context
-import com.fasterxml.jackson.module.kotlin.readValue
 import setu.domain.User
 import setu.domain.repository.UserDao
-import setu.utils.getMapper
+import setu.utils.jsonToObject
 
 object UserController {
 
     private val userDao = UserDao()
 
     fun getAllUsers(ctx: Context) {
-        ctx.json(userDao.getAll())
+        val users = userDao.getAll()
+        if (users.isNotEmpty()) {
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+        ctx.json(users)
     }
 
     fun getUserById(ctx: Context) {
         val user = userDao.findById(ctx.pathParam("user-id").toInt())
-        if (user != null)
+        if (user != null) {
             ctx.json(user)
-        else
-            ctx.json("404")
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
     }
 
     fun addUser(ctx: Context) {
-        val user = getMapper().readValue<User>(ctx.body())
-        userDao.save(user)
+        val user : User = jsonToObject(ctx.body())
+        val userId = userDao.save(user)
+        user.id = userId
         ctx.json(user)
+        ctx.status(201)
     }
 
     fun getUserByEmail(ctx: Context) {
         val user = userDao.findByEmail(ctx.pathParam("email"))
-        if (user != null)
+        if (user != null) {
             ctx.json(user)
+            ctx.status(200)
+        }
         else
-            ctx.json("404")
+            ctx.status(404)
     }
 
-    fun deleteUserById(ctx: Context) {
-        if (userDao.findById(ctx.pathParam("user-id").toInt()) != null)
-            userDao.delete(ctx.pathParam("user-id").toInt())
+    fun deleteUser(ctx: Context){
+        if (userDao.delete(ctx.pathParam("user-id").toInt()) != 0)
+            ctx.status(204)
         else
-            ctx.json("404")
+            ctx.status(404)
     }
 
-    fun updateUser(ctx: Context) {
-        val user = getMapper().readValue<User>(ctx.body())
-        if (userDao.findById(ctx.pathParam("user-id").toInt()) != null)
-            userDao.update(
-                id = ctx.pathParam("user-id").toInt(),
-                user = user
-            )
+    fun updateUser(ctx: Context){
+        val foundUser : User = jsonToObject(ctx.body())
+        if ((userDao.update(id = ctx.pathParam("user-id").toInt(), user=foundUser)) != 0)
+            ctx.status(204)
         else
-            ctx.json("404")
+            ctx.status(404)
     }
 }

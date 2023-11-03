@@ -18,33 +18,32 @@ class ActivityDao {
         return activityList
     }
 
-    fun findByUserId(userDd: Int): ArrayList<Activity>? {
+    fun findByUserId(userDd: Int): ArrayList<Activity> {
         val activityList: ArrayList<Activity> = arrayListOf()
         transaction {
-            Activities.select() {
-                Activities.userId eq userDd
-            }
+            Activities
+                .select { Activities.userId eq userDd }
                 .map {
                     activityList.add(mapToActivity(it))
                 }
         }
-        return activityList.ifEmpty { null }
+        return activityList
     }
 
-    fun save(activity: Activity) {
-        transaction {
+    fun save(activity: Activity): Int {
+        return transaction {
             Activities.insert {
                 it[description] = activity.description
                 it[duration] = activity.duration
                 it[calories] = activity.calories
                 it[started] = activity.started
                 it[userId] = activity.userId
-            }
+            } get Activities.id
         }
     }
 
-    fun deleteByUserId(userId: Int) {
-        transaction {
+    fun deleteByUserId(userId: Int): Int {
+        return transaction {
             Activities.deleteWhere {
                 Activities.userId eq userId
             }
@@ -53,24 +52,23 @@ class ActivityDao {
 
     fun findById(id: Int): Activity? {
         return transaction {
-            Activities.select() {
-                Activities.id eq id
-            }
+            Activities
+                .select { Activities.id eq id }
                 .map { mapToActivity(it) }
                 .firstOrNull()
         }
     }
 
-    fun deleteById(id: Int) {
-        transaction {
+    fun deleteById(id: Int): Int {
+        return transaction {
             Activities.deleteWhere {
                 Activities.id eq id
             }
         }
     }
 
-    fun update(id: Int, activity: Activity) {
-        transaction {
+    fun update(id: Int, activity: Activity): Int {
+        return transaction {
             Activities.update({
                 Activities.id eq id
             }) {
