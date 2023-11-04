@@ -43,10 +43,13 @@ class ActivityControllerTest {
         return Unirest.delete("$origin/api/users/$id/activities").asString()
     }
 
-    private fun updateActivity(id: Int, description: String, duration: Double, calories: Int,
-                               started: DateTime, userId: Int): HttpResponse<JsonNode> {
+    private fun updateActivity(
+        id: Int, description: String, duration: Double, calories: Int,
+        started: DateTime, userId: Int
+    ): HttpResponse<JsonNode> {
         return Unirest.patch("$origin/api/activities/$id")
-            .body("""
+            .body(
+                """
                 {
                   "description":"$description",
                   "duration":$duration,
@@ -54,14 +57,18 @@ class ActivityControllerTest {
                   "started":"$started",
                   "userId":$userId
                 }
-            """.trimIndent()).asJson()
+            """.trimIndent()
+            ).asJson()
     }
 
     //helper function to add an activity
-    private fun addActivity(description: String, duration: Double, calories: Int,
-                            started: DateTime, userId: Int): HttpResponse<JsonNode> {
+    private fun addActivity(
+        description: String, duration: Double, calories: Int,
+        started: DateTime, userId: Int
+    ): HttpResponse<JsonNode> {
         return Unirest.post("$origin/api/activities")
-            .body("""
+            .body(
+                """
                 {
                    "description":"$description",
                    "duration":$duration,
@@ -69,7 +76,8 @@ class ActivityControllerTest {
                    "started":"$started",
                    "userId":$userId
                 }
-            """.trimIndent())
+            """.trimIndent()
+            )
             .asJson()
     }
 
@@ -79,11 +87,10 @@ class ActivityControllerTest {
         @Test
         fun `get all activities from the database returns 200 or 404 response`() {
             val response = retrieveAllActivities()
-            if (response.status == 200){
+            if (response.status == 200) {
                 val retrievedActivities = jsonNodeToObject<Array<Activity>>(response)
                 assertNotEquals(0, retrievedActivities.size)
-            }
-            else{
+            } else {
                 assertEquals(404, response.status)
             }
         }
@@ -91,16 +98,19 @@ class ActivityControllerTest {
         @Test
         fun `get all activities by user id when user and activities exists returns 200 response`() {
             //Arrange - add a user and 3 associated activities that we plan to retrieve
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
             addActivity(
                 activities[0].description, activities[0].duration,
-                activities[0].calories, activities[0].started, addedUser.id)
+                activities[0].calories, activities[0].started, addedUser.id
+            )
             addActivity(
                 activities[1].description, activities[1].duration,
-                activities[1].calories, activities[1].started, addedUser.id)
+                activities[1].calories, activities[1].started, addedUser.id
+            )
             addActivity(
                 activities[2].description, activities[2].duration,
-                activities[2].calories, activities[2].started, addedUser.id)
+                activities[2].calories, activities[2].started, addedUser.id
+            )
 
             //Assert and Act - retrieve the three added activities by user id
             val response = retrieveActivitiesByUserId(addedUser.id)
@@ -114,7 +124,7 @@ class ActivityControllerTest {
 
         @Test
         fun `get all activities by user id when no activities exist returns 404 response`() {
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
 
             val response = retrieveActivitiesByUserId(addedUser.id)
             assertEquals(404, response.status)
@@ -139,12 +149,13 @@ class ActivityControllerTest {
 
         @Test
         fun `get activity by activity id when activity exists returns 200 response`() {
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
 
             val addActivityResponse = addActivity(
                 activities[0].description,
                 activities[0].duration, activities[0].calories,
-                activities[0].started, addedUser.id)
+                activities[0].started, addedUser.id
+            )
 
             assertEquals(201, addActivityResponse.status)
             val addedActivity = jsonNodeToObject<Activity>(addActivityResponse)
@@ -177,24 +188,27 @@ class ActivityControllerTest {
         @Test
         fun `updating an activity by activity id when it exists, returns 204 response`() {
 
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
             val addActivityResponse = addActivity(
                 activities[0].description,
                 activities[0].duration, activities[0].calories,
-                activities[0].started, addedUser.id)
+                activities[0].started, addedUser.id
+            )
             assertEquals(201, addActivityResponse.status)
             val addedActivity = jsonNodeToObject<Activity>(addActivityResponse)
 
-            val updatedActivityResponse = updateActivity(addedActivity.id, updatedDescription,
-                updatedDuration, updatedCalories, updatedStarted, addedUser.id)
+            val updatedActivityResponse = updateActivity(
+                addedActivity.id, updatedDescription,
+                updatedDuration, updatedCalories, updatedStarted, addedUser.id
+            )
             assertEquals(204, updatedActivityResponse.status)
 
             val retrievedActivityResponse = retrieveActivityByActivityId(addedActivity.id)
             val updatedActivity = jsonNodeToObject<Activity>(retrievedActivityResponse)
-            assertEquals(updatedDescription,updatedActivity.description)
+            assertEquals(updatedDescription, updatedActivity.description)
             assertEquals(updatedDuration, updatedActivity.duration, 0.1)
             assertEquals(updatedCalories, updatedActivity.calories)
-            assertEquals(updatedStarted, updatedActivity.started )
+            assertEquals(updatedStarted, updatedActivity.started)
 
             //After - delete the user
             UserControllerTest().deleteUser(addedUser.id)
@@ -220,10 +234,11 @@ class ActivityControllerTest {
         fun `deleting an activity by id when it exists, returns a 204 response`() {
 
             //Arrange - add a user and an associated activity that we plan to do a delete on
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
             val addActivityResponse = addActivity(
                 activities[0].description, activities[0].duration,
-                activities[0].calories, activities[0].started, addedUser.id)
+                activities[0].calories, activities[0].started, addedUser.id
+            )
             assertEquals(201, addActivityResponse.status)
 
             //Act & Assert - delete the added activity and assert a 204 is returned
@@ -238,18 +253,21 @@ class ActivityControllerTest {
         fun `deleting all activities by userid when it exists, returns a 204 response`() {
 
             //Arrange - add a user and 3 associated activities that we plan to do a cascade delete
-            val addedUser : User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
             val addActivityResponse1 = addActivity(
                 activities[0].description, activities[0].duration,
-                activities[0].calories, activities[0].started, addedUser.id)
+                activities[0].calories, activities[0].started, addedUser.id
+            )
             assertEquals(201, addActivityResponse1.status)
             val addActivityResponse2 = addActivity(
                 activities[1].description, activities[1].duration,
-                activities[1].calories, activities[1].started, addedUser.id)
+                activities[1].calories, activities[1].started, addedUser.id
+            )
             assertEquals(201, addActivityResponse2.status)
             val addActivityResponse3 = addActivity(
                 activities[2].description, activities[2].duration,
-                activities[2].calories, activities[2].started, addedUser.id)
+                activities[2].calories, activities[2].started, addedUser.id
+            )
             assertEquals(201, addActivityResponse3.status)
 
             //Act & Assert - delete the added user and assert a 204 is returned

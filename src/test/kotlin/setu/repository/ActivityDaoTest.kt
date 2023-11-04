@@ -82,7 +82,8 @@ class ActivityDaoTest {
         fun `get activities by User Id that doesn't exist, results in no user returned`() {
             transaction {
                 val activityDao = populateActivityTable()
-                Assertions.assertEquals(null, activityDao.findByUserId(10))
+                val activities = activityDao.findByUserId(10)
+                Assertions.assertEquals(null, if (activities.isEmpty()) null else activities)
             }
         }
 

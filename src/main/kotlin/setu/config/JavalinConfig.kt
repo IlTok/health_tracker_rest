@@ -5,6 +5,8 @@ import io.javalin.apibuilder.ApiBuilder.*
 import setu.controllers.ActivityController
 import setu.controllers.UserController
 import io.javalin.json.JavalinJackson
+import setu.controllers.ProductController
+import setu.domain.Product
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
@@ -55,6 +57,15 @@ class JavalinConfig {
                     get(ActivityController::getActivityById)
                     delete(ActivityController::deleteActivityById)
                     patch(ActivityController::updateActivityById)
+                }
+            }
+            path("/api/products"){
+                get(ProductController::getAllProducts)
+                post(ProductController::addProduct)
+                path("{product-name}"){
+                    get(ProductController::getProductByName)
+                    patch(ProductController::updateProduct)
+                    delete(ProductController::deleteProduct)
                 }
             }
         }
