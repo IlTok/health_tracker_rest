@@ -30,8 +30,6 @@ class ActivityDaoTest {
     }
 
     internal fun populateActivityTable(): ActivityDao {
-        UserDaoTest().populateUserTable()
-
         SchemaUtils.create(Activities)
         val activityDao = ActivityDao()
         activityDao.save(activity1)
