@@ -40,16 +40,20 @@ object ProductController {
         }
     }
 
-    fun deleteProduct(ctx: Context){
+    fun deleteProduct(ctx: Context) {
         if (productDao.deleteByName(ctx.pathParam("product-name")) != 0)
             ctx.status(204)
         else
             ctx.status(404)
     }
 
-    fun updateProduct(ctx: Context){
-        val newProduct : Product = jsonToObject(ctx.body())
-        if ((productDao.updateByName(name = ctx.pathParam("product-name"), product = newProduct)) != 0)
+    fun updateProduct(ctx: Context) {
+        val newProduct: Product = jsonToObject(ctx.body())
+        if ((productDao.updateByName(
+                name = ctx.pathParam("product-name"),
+                product = newProduct
+            )) != 0
+        )
             ctx.status(204)
         else
             ctx.status(404)

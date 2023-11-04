@@ -2,7 +2,14 @@ package setu.helpers
 
 import setu.domain.Product
 
-const val notExistingProductName = "chocolate"
+const val notExistingProductName = "product name"
+const val productName = "test product"
+const val productCalories = 700
+const val productProteins = 35
+const val productFats = 100
+const val productCarbohydrates = 10
+
+const val updatedProductCalories = 500
 
 val products = arrayListOf<Product>(
     Product(
