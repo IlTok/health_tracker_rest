@@ -40,7 +40,7 @@ class ProductDao {
         }
     }
 
-    fun delete(name: String): Int {
+    fun deleteByName(name: String): Int {
         return transaction {
             Products.deleteWhere {
                 Products.name eq name
@@ -48,7 +48,7 @@ class ProductDao {
         }
     }
 
-    fun update(name: String, product: Product): Int {
+    fun updateByName(name: String, product: Product): Int {
         return transaction {
             Products.update({
                 Products.name eq name
