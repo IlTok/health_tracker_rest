@@ -6,6 +6,7 @@ import setu.controllers.ActivityController
 import setu.controllers.UserController
 import io.javalin.json.JavalinJackson
 import setu.controllers.ProductController
+import setu.controllers.PurchaseController
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
@@ -73,6 +74,22 @@ class JavalinConfig {
                     path("/less/{calories}") {
                         get(ProductController::getProductsWhereCaloriesLowerThan)
                     }
+                }
+            }
+            path("/api/purchases"){
+                get(PurchaseController::getAllPurchases)
+                post(PurchaseController::addPurchase)
+                path("/user/{user-id}"){
+                    get(PurchaseController::getPurchasesByUserId)
+                    path("{product-name}"){
+                        get(PurchaseController::getPurchasesByProductNameAndUserId)
+                    }
+                }
+                path("/product/{product-name}"){
+                    get(PurchaseController::getPurchasesByProductName)
+                }
+                path("{purchase-id}"){
+                    delete(PurchaseController::deletePurchaseById)
                 }
             }
         }

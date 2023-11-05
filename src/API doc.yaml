@@ -1,0 +1,555 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Health Tracker API
+  description: This API provides endpoints for handling CRUD operations on the Health Tracker data.
+  contact:
+    name: Ilia Tokarev
+    email: 20105617@mail.wit.ie
+    
+paths:
+
+  /api/users/{user-id}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      description: Get user by user Id
+      responses:
+        200:
+          description: This is a specifc user in the app
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                
+    delete:
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      description: Delete user by user Id
+      responses:
+        200:
+          description: This user was deleted by id
+          
+    patch:
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      description: Update the exist user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'  
+      responses:
+        200:
+          description: This user was patched by id
+                
+  /api/users:
+    post:
+      description: Add a user to the app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+      responses:
+         200:
+           description: The user has been created
+           content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+           
+    get:
+      description: Get all the users
+      responses:
+        200:
+          description: This is a list of the users in the app
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                  
+  /api/users/email/{email}:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/UserEmailPath'
+      description: Get user by email
+      responses:
+        200:
+          description: This is a specefic user in the app
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                
+  /api/users/{user-id}/activities:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/UserIdPath'
+      description: Get activity by user Id
+      responses:
+        200:
+          description: These are specefic activities of necessary user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+                  
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/UserIdPath'
+      description: Delete activity by user Id
+      responses:
+        200:
+          description: These activities of necassary user was deleted
+          
+  /api/activities/{activity-id}:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/ActivityIdPath'
+      description: Get activity by Id
+      responses:
+        200:
+          description: This is specefic activity by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+                
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/ActivityIdPath'
+      responses:
+        200:
+          description: This specefic activity was deleted by id
+          
+    patch:
+      parameters:
+      - $ref: '#/components/parameters/ActivityIdPath'
+      description: Update the exist activity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityPost'
+      responses:
+        200:
+          description: This specefic activity was patched by id
+                
+  /api/activities:
+    get:
+      description: Get all the activities
+      responses:
+        200:
+          description: These are specefic activities in the app
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+                  
+    post:
+      description: Add an activity to app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityPost'
+      responses:
+         200:
+           description: The activity has been created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+                
+  /api/products:
+    get:
+      description: Get all the products
+      responses:
+        200:
+          description: These are all the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+                  
+    post:
+      description: Add a product to app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+         200:
+           description: The product has been created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+                
+  /api/products/{product-name}:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/ProductNamePath'
+      description: Get the exist product by name
+      responses:
+        200:
+          description: This is specefic product by name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+                
+    patch:
+      parameters:
+      - $ref: '#/components/parameters/ProductNamePath'
+      description: Update the exist product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPost'
+      responses:
+        200:
+          description: This specefic product was patched by product name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/ProductNamePath'
+      description: Delete the exist product by name
+      responses:
+        200:
+          description: This specefic product was deleted by product name
+          
+  /api/products/calories/greater/{calories}:
+    get:
+      description: Get all the products where calories are greater
+      parameters:
+      - $ref: '#/components/parameters/CaloriesPath'
+      responses:
+        200:
+          description: These are all the products where calories are more
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+                  
+  /api/products/calories/less/{calories}:
+    get:
+      description: Get all the products where calories are less
+      parameters:
+      - $ref: '#/components/parameters/CaloriesPath'
+      responses:
+        200:
+          description: These are all the products where calories are less
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+                  
+  /api/purchases:
+    get:
+      description: Get all the purchases
+      responses:
+        200:
+          description: These are all the purchases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+                  
+    post:
+      description: Add a purchase to app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchasePost'
+      responses:
+         200:
+           description: The purchase has been created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+                
+  /api/purchases/user/{user-id}:
+    get:
+      description: Get all the purchases by user Id
+      parameters:
+      - $ref: '#/components/parameters/UserIdPath'
+      responses:
+        200:
+          description: These are all the purchases by user Id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+                  
+  /api/purchases/user/{user-id}/{product-name}:
+    get:
+      description: Get all the purchases by user Id and product Name
+      parameters:
+      - $ref: '#/components/parameters/UserIdPath'
+      - $ref: '#/components/parameters/ProductNamePath'
+      responses:
+        200:
+          description: These are all the purchases by user Id and product Name
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+                  
+  /api/purchases/product/{product-name}:
+    get:
+      description: Get all the purchases by product Name
+      parameters:
+      - $ref: '#/components/parameters/ProductNamePath'
+      responses:
+        200:
+          description: These are all the purchases by product Name
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+                  
+  /api/purchases/{purchase-id}:
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/PurchaseIdPath'
+      description: Delete the exist purchase by id
+      responses:
+        200:
+          description: This specefic product was deleted by product name
+          
+    patch:
+      parameters:
+      - $ref: '#/components/parameters/PurchaseIdPath'
+      description: Update the exist purchase
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPost'
+      responses:
+        200:
+          description: This specefic purchase was patched by product name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+                  
+components:
+
+  parameters:
+  
+    UserIdPath:
+      in: path
+      name: user-id
+      description: User id path parameter
+      required: true
+      schema:
+        type: integer
+        example: 3232
+        
+    UserEmailPath:
+      in: path
+      name: email
+      description: User emal path parameter
+      required: true
+      schema:
+        type: string
+        example: joe@soap.com
+        
+    ActivityIdPath:
+      in: path
+      name: activity-id
+      description: Activity id path parameter
+      required: true
+      schema:
+        type: integer
+        example: 1707
+        
+    ProductNamePath:
+      in: path
+      name: product-name
+      description: Product name path parameter
+      required: true
+      schema:
+        type: string
+        example: carrot
+        
+    CaloriesPath:
+      in: path
+      name: calories
+      description: Calories path parameter
+      required: true
+      schema:
+        type: integer
+        example: 555
+        
+    PurchaseIdPath:
+      in: path
+      name: purchase-id
+      description: Purchase Id path parameter
+      required: true
+      schema:
+        type: integer
+        example: 2
+        
+  schemas:
+  
+    User:
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 3232
+        name:
+          type: string
+          example: Joe Soap
+        email:
+          type: string
+          example: joe@soap.com
+          
+    UserPost:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Joe Soap
+        email:
+          type: string
+          example: joe@soap.com
+          
+    Activity:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1707
+        description:
+          type: string
+          example: Running in the park
+        duration:
+          type: number
+          example: 30.1
+        calories:
+          type: integer
+          example: 150
+        started:
+          type: string
+          example: 2021-06-10 06:59:27 +0000
+        userId:
+          type: integer
+          example: 3232
+          
+    ActivityPost:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Running in the park
+        duration:
+          type: number
+          example: 30.1
+        calories:
+          type: integer
+          example: 150
+        started:
+          type: string
+          example: 2021-06-10 06:59:27 +0000
+        userId:
+          type: integer
+          example: 3232
+          
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: carrot
+        calories:
+          type: integer
+          example: 35
+        proteins:
+          type: integer
+          example: 35
+        fats:
+          type: integer
+          example: 35
+        carbohydrates:
+          type: integer
+          example: 35
+          
+    ProductPost:
+      type: object
+      properties:
+        calories:
+          type: integer
+          example: 35
+        proteins:
+          type: integer
+          example: 35
+        fats:
+          type: integer
+          example: 35
+        carbohydrates:
+          type: integer
+          example: 35
+          
+    Purchase:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        userId:
+          type: integer
+          example: 3232
+        productName:
+          type: string
+          example: carrot
+        price:
+          type: number
+          example: 1.2
+          
+    PurchasePost:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 3232
+        productName:
+          type: string
+          example: carrot
+        price:
+          type: number
+          example: 1.2
