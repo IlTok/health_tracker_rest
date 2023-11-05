@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import setu.domain.Product
 import setu.domain.db.Products
 import setu.domain.repository.ProductDao
+import setu.helpers.caloriesThan
 import setu.helpers.notExistingProductName
 import setu.helpers.products
 
@@ -98,6 +99,56 @@ class ProductDaoTest {
                 SchemaUtils.create(Products)
                 val productDao = ProductDao()
                 Assertions.assertEquals(0, productDao.getAll().size)
+            }
+        }
+
+        @Test
+        fun `get products where calories are greater returns all rows`() {
+            transaction {
+                transaction {
+                    val productDao = populateProductTable()
+
+                    Assertions.assertEquals(4, productDao.getAll().size)
+                    Assertions.assertEquals(2, productDao.findByCaloriesGreaterThan(caloriesThan).size)
+
+                    for (i in productDao.findByCaloriesGreaterThan(caloriesThan)){
+                        Assertions.assertEquals(true, i.calories > caloriesThan)
+                    }
+                }
+            }
+        }
+
+        @Test
+        fun `get all products where calories are greater from an empty db`() {
+            transaction {
+                SchemaUtils.create(Products)
+                val productDao = ProductDao()
+                Assertions.assertEquals(0, productDao.findByCaloriesGreaterThan(caloriesThan).size)
+            }
+        }
+
+        @Test
+        fun `get products where calories are less returns all rows`() {
+            transaction {
+                transaction {
+                    val productDao = populateProductTable()
+
+                    Assertions.assertEquals(4, productDao.getAll().size)
+                    Assertions.assertEquals(2, productDao.findByCaloriesLessThan(caloriesThan).size)
+
+                    for (i in productDao.findByCaloriesLessThan(caloriesThan)){
+                        Assertions.assertEquals(true, i.calories < caloriesThan)
+                    }
+                }
+            }
+        }
+
+        @Test
+        fun `get all products where calories are less from an empty db`() {
+            transaction {
+                SchemaUtils.create(Products)
+                val productDao = ProductDao()
+                Assertions.assertEquals(0, productDao.findByCaloriesLessThan(caloriesThan).size)
             }
         }
     }
