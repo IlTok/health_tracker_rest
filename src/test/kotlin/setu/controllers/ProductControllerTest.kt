@@ -101,6 +101,92 @@ class ProductControllerTest {
             assertEquals(200, retrieveResponse.status)
             deleteProductByName(addedProduct.name)
         }
+
+        @Test
+        fun `getting a product where calories are greater, returns 200 or 404 response`() {
+            val response = Unirest.get("$origin/api/products/calories/greater/${caloriesThan}").asString()
+            if (response.status == 200) {
+                val retrievedProducts: ArrayList<Product> = jsonToObject(response.body.toString())
+                assertNotEquals(0, retrievedProducts.size)
+            } else {
+                assertEquals(404, response.status)
+            }
+        }
+
+        @Test
+        fun `getting a product where calories are less, returns 200 or 404 response`() {
+            val response = Unirest.get("$origin/api/products/calories/less/${caloriesThan}").asString()
+            if (response.status == 200) {
+                val retrievedProducts: ArrayList<Product> = jsonToObject(response.body.toString())
+                assertNotEquals(0, retrievedProducts.size)
+            } else {
+                assertEquals(404, response.status)
+            }
+        }
+
+        @Test
+        fun `getting a product where calories are greater and not equal, returns 200 or 404 response`() {
+            val response1 = Unirest.get("$origin/api/products/calories/greater/${caloriesEquals}").asString()
+            if (response1.status == 200) {
+                val retrievedProducts: ArrayList<Product> = jsonToObject(response1.body.toString())
+                assertNotEquals(0, retrievedProducts.size)
+
+                val initialSize = retrievedProducts.size
+
+                val addedResponse = addResponse()
+                val addedProduct: Product = jsonToObject(addedResponse.body.toString())
+                assertEquals(201, addedResponse.status)
+
+                val response2 = Unirest.get("$origin/api/products/calories/greater/${caloriesEquals}").asString()
+                val responseProducts: ArrayList<Product> = jsonToObject(response2.body.toString())
+                assertEquals(initialSize, responseProducts.size)
+
+                deleteProductByName(addedProduct.name)
+            } else {
+                assertEquals(404, response1.status)
+
+                val addedResponse = addResponse()
+                val addedProduct: Product = jsonToObject(addedResponse.body.toString())
+                assertEquals(201, addedResponse.status)
+
+                val response3 = Unirest.get("$origin/api/products/calories/greater/${caloriesEquals}").asString()
+                assertEquals(404, response3.status)
+
+                deleteProductByName(addedProduct.name)
+            }
+        }
+
+        @Test
+        fun `getting a product where calories are less and not equal, returns 200 or 404 response`() {
+            val response1 = Unirest.get("$origin/api/products/calories/less/${caloriesEquals}").asString()
+            if (response1.status == 200) {
+                val retrievedProducts: ArrayList<Product> = jsonToObject(response1.body.toString())
+                assertNotEquals(0, retrievedProducts.size)
+
+                val initialSize = retrievedProducts.size
+
+                val addedResponse = addResponse()
+                val addedProduct: Product = jsonToObject(addedResponse.body.toString())
+                assertEquals(201, addedResponse.status)
+
+                val response2 = Unirest.get("$origin/api/products/calories/less/${caloriesEquals}").asString()
+                val responseProducts: ArrayList<Product> = jsonToObject(response2.body.toString())
+                assertEquals(initialSize, responseProducts.size)
+
+                deleteProductByName(addedProduct.name)
+            } else {
+                assertEquals(404, response1.status)
+
+                val addedResponse = addResponse()
+                val addedProduct: Product = jsonToObject(addedResponse.body.toString())
+                assertEquals(201, addedResponse.status)
+
+                val response3 = Unirest.get("$origin/api/products/calories/less/${caloriesEquals}").asString()
+                assertEquals(404, response3.status)
+
+                deleteProductByName(addedProduct.name)
+            }
+        }
     }
 
     @Nested

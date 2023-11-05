@@ -8,6 +8,8 @@ const val productCalories = 700
 const val productProteins = 35
 const val productFats = 100
 const val productCarbohydrates = 10
+const val caloriesThan = 200
+const val caloriesEquals = 700
 
 const val updatedProductCalories = 500
 

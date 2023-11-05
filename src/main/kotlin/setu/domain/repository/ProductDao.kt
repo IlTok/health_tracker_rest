@@ -28,6 +28,30 @@ class ProductDao {
         }
     }
 
+    fun findByCaloriesGreaterThan(calories: Int): ArrayList<Product> {
+        val productList: ArrayList<Product> = arrayListOf()
+        transaction {
+            Products
+                .select { Products.calories greater calories }
+                .map {
+                    productList.add(mapToProduct(it))
+                }
+        }
+        return productList
+    }
+
+    fun findByCaloriesLessThan(calories: Int): ArrayList<Product> {
+        val productList: ArrayList<Product> = arrayListOf()
+        transaction {
+            Products
+                .select { Products.calories less calories }
+                .map {
+                    productList.add(mapToProduct(it))
+                }
+        }
+        return productList
+    }
+
     fun save(product: Product) {
         return transaction {
             Products.insert {

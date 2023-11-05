@@ -29,6 +29,26 @@ object ProductController {
         }
     }
 
+    fun getProductsWhereCaloriesGreaterThan(ctx: Context){
+        val products = productDao.findByCaloriesGreaterThan(ctx.pathParam("calories").toInt())
+        if (products.isNotEmpty()) {
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+        ctx.json(products)
+    }
+
+    fun getProductsWhereCaloriesLowerThan(ctx: Context){
+        val products = productDao.findByCaloriesLessThan(ctx.pathParam("calories").toInt())
+        if (products.isNotEmpty()) {
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+        ctx.json(products)
+    }
+
     fun addProduct(ctx: Context) {
         val product: Product = jsonToObject(ctx.body())
         if (productDao.findByName(product.name) == null) {
