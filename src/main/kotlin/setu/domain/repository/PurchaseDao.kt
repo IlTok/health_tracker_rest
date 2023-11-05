@@ -75,16 +75,4 @@ class PurchaseDao {
         }
     }
 
-    fun updateById(id: Int, purchase: Purchase): Int {
-        return transaction {
-            Purchases.update({
-                Purchases.id eq id
-            }) {
-                it[userId] = purchase.userId
-                it[productName] = purchase.productName
-                it[price] = purchase.price
-            }
-        }
-    }
-
 }

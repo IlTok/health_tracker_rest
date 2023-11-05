@@ -89,16 +89,4 @@ object PurchaseController {
         else
             ctx.status(404)
     }
-
-    fun updatePurchaseById(ctx: Context) {
-        val purchase: Purchase = jsonToObject(ctx.body())
-        if (purchaseDao.updateById(
-                id = ctx.pathParam("purchase-id").toInt(),
-                purchase = purchase
-            ) != 0
-        )
-            ctx.status(204)
-        else
-            ctx.status(404)
-    }
 }

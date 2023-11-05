@@ -90,7 +90,6 @@ class JavalinConfig {
                 }
                 path("{purchase-id}"){
                     delete(PurchaseController::deletePurchaseById)
-                    patch(PurchaseController::updatePurchaseById)
                 }
             }
         }
