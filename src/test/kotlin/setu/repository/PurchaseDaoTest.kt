@@ -93,15 +93,6 @@ class PurchaseDaoTest {
         }
 
         @Test
-        fun `get purchases by product Name and user Id that don't exist, results in no purchase returned`() {
-            transaction {
-                val purchaseDao = populatePurchaseTable()
-                val purchases = purchaseDao.findByUserIdAndProductName(nonExistingUserId, nonExistingProductName)
-                Assertions.assertEquals(null, if (purchases.isEmpty()) null else purchases)
-            }
-        }
-
-        @Test
         fun `get purchases by User Id that exist, results in a correct user returned`() {
             transaction {
                 val purchaseDao = populatePurchaseTable()
@@ -115,15 +106,6 @@ class PurchaseDaoTest {
             transaction {
                 val purchaseDao = populatePurchaseTable()
                 val purchases = purchaseDao.findByProductName(purchase1.productName)
-                Assertions.assertEquals(1, purchases.size)
-            }
-        }
-
-        @Test
-        fun `get purchases by product Name and user Id that exis, results in no purchase returned`() {
-            transaction {
-                val purchaseDao = populatePurchaseTable()
-                val purchases = purchaseDao.findByUserIdAndProductName(purchase1.userId, purchase1.productName)
                 Assertions.assertEquals(1, purchases.size)
             }
         }

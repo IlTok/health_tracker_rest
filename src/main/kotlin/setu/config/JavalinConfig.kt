@@ -79,17 +79,24 @@ class JavalinConfig {
             path("/api/purchases"){
                 get(PurchaseController::getAllPurchases)
                 post(PurchaseController::addPurchase)
+                path("{price}"){
+                    path("/less") {
+                        get(PurchaseController::getPurchasesWherePricesLessThan)
+                    }
+                    path("/greater") {
+                        get(PurchaseController::getPurchasesWherePricesGreaterThan)
+                    }
+                }
+                path("{purchase-id}"){
+                    get(PurchaseController::getPurchaseById)
+                    patch(PurchaseController::updatePurchaseById)
+                    delete(PurchaseController::deletePurchaseById)
+                }
                 path("/user/{user-id}"){
                     get(PurchaseController::getPurchasesByUserId)
-                    path("{product-name}"){
-                        get(PurchaseController::getPurchasesByProductNameAndUserId)
-                    }
                 }
                 path("/product/{product-name}"){
                     get(PurchaseController::getPurchasesByProductName)
-                }
-                path("{purchase-id}"){
-                    delete(PurchaseController::deletePurchaseById)
                 }
             }
         }
