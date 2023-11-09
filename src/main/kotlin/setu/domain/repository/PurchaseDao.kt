@@ -18,6 +18,16 @@ class PurchaseDao {
         return purchaseList
     }
 
+    fun findById(id: Int): Purchase? {
+        return transaction {
+            Purchases.select() {
+                Purchases.id eq id
+            }
+                .map { mapToPurchase(it) }
+                .firstOrNull()
+        }
+    }
+
     fun findByUserId(userId: Int): ArrayList<Purchase> {
         val purchaseList: ArrayList<Purchase> = arrayListOf()
         transaction {
@@ -42,17 +52,22 @@ class PurchaseDao {
         return purchaseList
     }
 
-    fun findByUserIdAndProductName(userId: Int, productName: String): ArrayList<Purchase> {
+    fun findPurchasesWherePriceGreaterThan(price: Double): ArrayList<Purchase> {
         val purchaseList: ArrayList<Purchase> = arrayListOf()
         transaction {
-            Purchases.select() {
-                Purchases.productName eq productName
-            }
+            Purchases
+                .select { Purchases.price greater price }
                 .map { purchaseList.add(mapToPurchase(it)) }
-                .firstOrNull()
         }
-        purchaseList.filter {
-            it.userId == userId
+        return purchaseList
+    }
+
+    fun findPurchasesWherePriceLessThan(price: Double): ArrayList<Purchase> {
+        val purchaseList: ArrayList<Purchase> = arrayListOf()
+        transaction {
+            Purchases
+                .select { Purchases.price less  price }
+                .map { purchaseList.add(mapToPurchase(it)) }
         }
         return purchaseList
     }
@@ -64,6 +79,18 @@ class PurchaseDao {
                 it[productName] = purchase.productName
                 it[price] = purchase.price
             } get Purchases.id
+        }
+    }
+
+    fun updateById(id: Int, purchase: Purchase): Int {
+        return transaction {
+            Purchases.update({
+                Purchases.id eq id
+            }) {
+                it[userId] = purchase.userId
+                it[productName] = purchase.productName
+                it[price] = purchase.price
+            }
         }
     }
 

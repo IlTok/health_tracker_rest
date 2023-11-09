@@ -20,7 +20,7 @@ class ProductControllerTest {
     private val app = ServerContainer.instance
     private val origin = "http://localhost:" + app.port()
 
-    private fun addProduct(
+    fun addProduct(
         name: String, calories: Int, proteins: Int,
         fats: Int, carbohydrates: Int
     ): HttpResponse<JsonNode> {
@@ -39,7 +39,7 @@ class ProductControllerTest {
             .asJson()
     }
 
-    private fun deleteProductByName(name: String): HttpResponse<String> {
+    fun deleteProductByName(name: String): HttpResponse<String> {
         return Unirest.delete("$origin/api/products/${name}").asString()
     }
 
