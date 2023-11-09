@@ -52,7 +52,7 @@ class PurchaseDao {
         return purchaseList
     }
 
-    fun findPurchasesWherePriceGreaterThan(price: Int): ArrayList<Purchase> {
+    fun findPurchasesWherePriceGreaterThan(price: Double): ArrayList<Purchase> {
         val purchaseList: ArrayList<Purchase> = arrayListOf()
         transaction {
             Purchases
@@ -62,7 +62,7 @@ class PurchaseDao {
         return purchaseList
     }
 
-    fun findPurchasesWherePriceLessThan(price: Int): ArrayList<Purchase> {
+    fun findPurchasesWherePriceLessThan(price: Double): ArrayList<Purchase> {
         val purchaseList: ArrayList<Purchase> = arrayListOf()
         transaction {
             Purchases

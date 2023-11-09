@@ -2,27 +2,42 @@ package setu.helpers
 
 import setu.domain.Purchase
 
-val nonExistingId = -100
-val nonExistingUserId = 500
-val nonExistingProductName = "asdkkfqwe"
+const val existingId = 1
+const val nonExistingId = -100
+const val nonExistingUserId = -500
+const val nonExistingProductName = "asdkkfqwe"
+const val testingPrice = 1.0
+const val testingPrice1 = 1.1
+const val testingPrice2 = 0.75
+const val testingPrice3 = 1.27
+const val newPrice = 10.25
+const val minimumPrice = Double.MIN_VALUE
+const val maximumPrice = Double.MAX_VALUE
 
 val purchases = arrayListOf<Purchase>(
     Purchase(
         id = 1,
         userId = 1,
         productName = "cheese",
-        price = 2.5,
+        price = 0.5,
     ),
     Purchase(
         id = 2,
         userId = 1,
         productName = "beef",
-        price = 7.5,
+        price = 1.5,
     ),
     Purchase(
         id = 3,
         userId = 2,
         productName = "beef",
-        price = 15.2,
+        price = 2.2,
     ),
+)
+
+val purchaseEqualPrice = Purchase(
+    id = 4,
+    userId = 3,
+    productName = "cheese",
+    price = testingPrice,
 )

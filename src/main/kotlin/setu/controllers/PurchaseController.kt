@@ -62,7 +62,7 @@ object PurchaseController {
     }
 
     fun getPurchasesWherePricesGreaterThan(ctx: Context) {
-        val purchases = purchaseDao.findPurchasesWherePriceGreaterThan(ctx.pathParam("price").toInt())
+        val purchases = purchaseDao.findPurchasesWherePriceGreaterThan(ctx.pathParam("price").toDouble())
         if (purchases.isNotEmpty()) {
             ctx.json(purchases)
             ctx.status(200)
@@ -72,7 +72,7 @@ object PurchaseController {
     }
 
     fun getPurchasesWherePricesLessThan(ctx: Context) {
-        val purchases = purchaseDao.findPurchasesWherePriceLessThan(ctx.pathParam("price").toInt())
+        val purchases = purchaseDao.findPurchasesWherePriceLessThan(ctx.pathParam("price").toDouble())
         if (purchases.isNotEmpty()) {
             ctx.json(purchases)
             ctx.status(200)

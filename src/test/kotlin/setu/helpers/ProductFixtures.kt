@@ -10,8 +10,8 @@ const val productFats = 100
 const val productCarbohydrates = 10
 const val caloriesThan = 200
 const val caloriesEquals = 700
-
 const val updatedProductCalories = 500
+const val testName = "test name"
 
 val products = arrayListOf<Product>(
     Product(

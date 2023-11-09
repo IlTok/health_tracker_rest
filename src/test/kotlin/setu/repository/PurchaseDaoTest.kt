@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import setu.domain.Purchase
 import setu.domain.db.Purchases
 import setu.domain.repository.PurchaseDao
-import setu.helpers.nonExistingProductName
-import setu.helpers.nonExistingUserId
-import setu.helpers.purchases
+import setu.helpers.*
 
 class PurchaseDaoTest {
 
@@ -118,6 +117,90 @@ class PurchaseDaoTest {
                 Assertions.assertEquals(0, purchaseDao.getAll().size)
             }
         }
+
+        @Test
+        fun `get purchase by Id that doesn't exist`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                Assertions.assertEquals(null, purchaseDao.findById(nonExistingId))
+            }
+        }
+
+        @Test
+        fun `get purchase by Id that exists`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                Assertions.assertEquals(purchase1, purchaseDao.findById(purchase1.id))
+            }
+        }
+
+        @Test
+        fun `get purchases where price are greater than`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findPurchasesWherePriceGreaterThan(testingPrice)
+                Assertions.assertEquals(2, purchases.size)
+                for (i in purchases) {
+                    Assertions.assertTrue(i.price > testingPrice)
+                }
+            }
+        }
+
+        @Test
+        fun `get purchases where price are greater than, with equal price of purchase in db`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                purchaseDao.save(purchaseEqualPrice)
+                val purchases = purchaseDao.findPurchasesWherePriceGreaterThan(testingPrice)
+                Assertions.assertEquals(2, purchases.size)
+                for (i in purchases) {
+                    Assertions.assertTrue(i.price > testingPrice)
+                }
+            }
+        }
+
+        @Test
+        fun `get purchases where price are greater than, over empty table returns none`() {
+            transaction {
+                SchemaUtils.create(Purchases)
+                val purchaseDao = PurchaseDao()
+                Assertions.assertEquals(0, purchaseDao.findPurchasesWherePriceGreaterThan(testingPrice).size)
+            }
+        }
+
+        @Test
+        fun `get purchases where price are less than`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findPurchasesWherePriceLessThan(testingPrice)
+                Assertions.assertEquals(1, purchases.size)
+                for (i in purchases) {
+                    Assertions.assertTrue(i.price < testingPrice)
+                }
+            }
+        }
+
+        @Test
+        fun `get purchases where price are less than, with equal price of purchase in db`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                purchaseDao.save(purchaseEqualPrice)
+                val purchases = purchaseDao.findPurchasesWherePriceLessThan(testingPrice)
+                Assertions.assertEquals(1, purchases.size)
+                for (i in purchases) {
+                    Assertions.assertTrue(i.price < testingPrice)
+                }
+            }
+        }
+
+        @Test
+        fun `get purchases where price are less than, over empty table returns none`() {
+            transaction {
+                SchemaUtils.create(Purchases)
+                val purchaseDao = PurchaseDao()
+                Assertions.assertEquals(0, purchaseDao.findPurchasesWherePriceLessThan(testingPrice).size)
+            }
+        }
     }
 
     @Nested
@@ -142,6 +225,44 @@ class PurchaseDaoTest {
                 Assertions.assertEquals(3, purchaseDao.getAll().size)
                 purchaseDao.deleteById(purchase1.id)
                 Assertions.assertEquals(2, purchaseDao.getAll().size)
+            }
+        }
+    }
+
+    @Nested
+    inner class UpdatePurchases {
+
+        @Test
+        fun `updating the existing purchase by Id in table results in successful update`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+
+                val newPurchase = Purchase(
+                    id = existingId,
+                    userId = 2,
+                    productName = "salmon",
+                    price = 3.2,
+                )
+
+                purchaseDao.updateById(existingId, newPurchase)
+                Assertions.assertEquals(newPurchase, purchaseDao.findById(existingId))
+            }
+        }
+
+        @Test
+        fun `updating non-existant purchase by Id in table results in no updates`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+
+                val newPurchase = Purchase(
+                    id = nonExistingId,
+                    userId = 2,
+                    productName = "salmon",
+                    price = 3.2,
+                )
+
+                purchaseDao.updateById(nonExistingId, newPurchase)
+                Assertions.assertEquals(null, purchaseDao.findById(nonExistingId))
             }
         }
     }
