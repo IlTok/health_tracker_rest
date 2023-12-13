@@ -5,15 +5,18 @@ import io.javalin.apibuilder.ApiBuilder.*
 import setu.controllers.ActivityController
 import setu.controllers.UserController
 import io.javalin.json.JavalinJackson
+import io.javalin.vue.VueComponent
 import setu.controllers.ProductController
 import setu.controllers.PurchaseController
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
 
-    val app = Javalin.create {
+    val app = Javalin.create{
         //added this jsonMapper for our integration tests - serialise objects to json
         it.jsonMapper(JavalinJackson(jsonObjectMapper()))
+        it.staticFiles.enableWebjars()
+        it.vue.vueAppName = "app" // only required for Vue 3, is defined in layout.html
     }.apply {
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("404 : Not Found") }
@@ -34,6 +37,11 @@ class JavalinConfig {
 
     private fun registerRoutes(app: Javalin) {
         app.routes {
+            get("/", VueComponent("<home-page></home-page>"))
+            get("/users", VueComponent("<user-overview></user-overview>"))
+            get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
+            get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
+
             path("/api/users") {
                 get(UserController::getAllUsers)
                 post(UserController::addUser)

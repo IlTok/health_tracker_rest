@@ -97,5 +97,35 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__shared:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__compiler-dom:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__compiler-core:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__runtime-dom:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__runtime-core:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__reactivity:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:csstype:3.0.0-beta.4" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__server-renderer:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__compiler-ssr:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__compiler-sfc:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue__reactivity-transform:3.2.47" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:babel__parser:8.0.0-alpha.5" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:magic-string:0.25.9" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:sourcemap-codec:1.4.8" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:postcss:8.4.32" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:nanoid:3.3.7" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:picocolors:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:source-map-js:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:source-map:0.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:estree-walker:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:axios:1.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:follow-redirects:1.15.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:form-data:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:asynckit:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:combined-stream:1.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:delayed-stream:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:mime-types:2.1.35" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:mime-db:1.52.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:proxy-from-env:1.1.0" level="project" />
   </component>
 </module>
