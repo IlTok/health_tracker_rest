@@ -28,6 +28,11 @@ class JavalinConfig {
         return app
     }
 
+    fun getJavalinService(): Javalin {
+        registerRoutes(app)
+        return app
+    }
+
     private fun getRemoteAssignedPort(): Int {
         val remotePort = System.getenv("PORT")
         return if (remotePort != null) {
