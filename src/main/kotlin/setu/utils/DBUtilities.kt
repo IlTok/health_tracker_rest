@@ -1,14 +1,8 @@
 package setu.utils
 
 import org.jetbrains.exposed.sql.ResultRow
-import setu.domain.Activity
-import setu.domain.Product
-import setu.domain.Purchase
-import setu.domain.User
-import setu.domain.db.Activities
-import setu.domain.db.Products
-import setu.domain.db.Purchases
-import setu.domain.db.Users
+import setu.domain.*
+import setu.domain.db.*
 
 fun mapToUser(it: ResultRow) = User(
     id = it[Users.id],
@@ -38,4 +32,11 @@ fun mapToPurchase(it: ResultRow) = Purchase(
     userId = it[Purchases.userId],
     productName = it[Purchases.productName],
     price = it[Purchases.price],
+)
+
+fun mapToSleep(it: ResultRow) = Sleep(
+    id = it[Sleeps.id],
+    duration = it[Sleeps.duration],
+    date = it[Sleeps.date],
+    userId = it[Sleeps.userId],
 )
