@@ -56,7 +56,7 @@ object SleepController {
 
     fun updateSleep(ctx: Context) {
         val foundSleep: Sleep = jsonToObject(ctx.body())
-        if ((sleepDao.update(id = ctx.pathParam("user-id").toInt(), sleep = foundSleep)) != 0)
+        if ((sleepDao.update(id = ctx.pathParam("sleep-id").toInt(), sleep = foundSleep)) != 0)
             ctx.status(204)
         else
             ctx.status(404)

@@ -4,7 +4,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import setu.domain.Sleep
 import setu.domain.db.Sleeps
-import setu.domain.db.Users
 import setu.utils.mapToSleep
 
 class SleepDao {
@@ -12,7 +11,7 @@ class SleepDao {
     fun getAll(): ArrayList<Sleep> {
         val sleepList: ArrayList<Sleep> = arrayListOf()
         transaction {
-            Users.selectAll().map {
+            Sleeps.selectAll().map {
                 sleepList.add(mapToSleep(it))
             }
         }
@@ -32,7 +31,7 @@ class SleepDao {
     fun findByUserId(userId: Int): ArrayList<Sleep> {
         val sleepList: ArrayList<Sleep> = arrayListOf()
         transaction {
-            Users.select {
+            Sleeps.select {
                 Sleeps.userId eq userId
             }.map {
                 sleepList.add(mapToSleep(it))
@@ -47,7 +46,7 @@ class SleepDao {
                 it[duration] = sleep.duration
                 it[date] = sleep.date
                 it[userId] = sleep.userId
-            } get Users.id
+            } get Sleeps.id
         }
     }
 

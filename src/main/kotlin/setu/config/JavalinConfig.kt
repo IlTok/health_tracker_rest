@@ -112,12 +112,12 @@ class JavalinConfig {
             path("/api/sleeps"){
                 get(SleepController::getAllSleeps)
                 post(SleepController::addSleep)
-                path("{user-id}"){
+                path("/user/{user-id}"){
                     get(SleepController::getSleepsByUserId)
-                    patch(SleepController::updateSleep)
                 }
-                path("{sleep-id}"){
+                path("/sleep/{sleep-id}"){
                     get(SleepController::getSleepById)
+                    patch(SleepController::updateSleep)
                     delete(SleepController::deleteSleep)
                 }
             }
