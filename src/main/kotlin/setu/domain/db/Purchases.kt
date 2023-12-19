@@ -8,4 +8,5 @@ object Purchases: Table("purchases") {
     val userId = integer("user_id").references(Users.id, onDelete = ReferenceOption.CASCADE)
     val productName = varchar("product_name", 100).references(Products.name, onDelete = ReferenceOption.CASCADE)
     val price = double("price")
+    val date = datetime("date")
 }

@@ -2,17 +2,14 @@ package setu.config
 
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
-import setu.controllers.ActivityController
-import setu.controllers.UserController
 import io.javalin.json.JavalinJackson
 import io.javalin.vue.VueComponent
-import setu.controllers.ProductController
-import setu.controllers.PurchaseController
+import setu.controllers.*
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
 
-    val app = Javalin.create{
+    val app: Javalin = Javalin.create{
         //added this jsonMapper for our integration tests - serialise objects to json
         it.jsonMapper(JavalinJackson(jsonObjectMapper()))
         it.staticFiles.enableWebjars()
@@ -110,6 +107,18 @@ class JavalinConfig {
                 }
                 path("/product/{product-name}"){
                     get(PurchaseController::getPurchasesByProductName)
+                }
+            }
+            path("/api/sleeps"){
+                get(SleepController::getAllSleeps)
+                post(SleepController::addSleep)
+                path("/user/{user-id}"){
+                    get(SleepController::getSleepsByUserId)
+                }
+                path("/sleep/{sleep-id}"){
+                    get(SleepController::getSleepById)
+                    patch(SleepController::updateSleep)
+                    delete(SleepController::deleteSleep)
                 }
             }
         }

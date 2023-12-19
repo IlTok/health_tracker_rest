@@ -78,6 +78,7 @@ class PurchaseDao {
                 it[userId] = purchase.userId
                 it[productName] = purchase.productName
                 it[price] = purchase.price
+                it[date] = purchase.date
             } get Purchases.id
         }
     }
@@ -90,6 +91,7 @@ class PurchaseDao {
                 it[userId] = purchase.userId
                 it[productName] = purchase.productName
                 it[price] = purchase.price
+                it[date] = purchase.date
             }
         }
     }
