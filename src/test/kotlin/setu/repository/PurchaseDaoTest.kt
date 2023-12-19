@@ -3,6 +3,7 @@ package setu.repository
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
@@ -242,6 +243,7 @@ class PurchaseDaoTest {
                     userId = 2,
                     productName = "salmon",
                     price = 3.2,
+                    date = DateTime.now()
                 )
 
                 purchaseDao.updateById(existingId, newPurchase)
@@ -259,6 +261,7 @@ class PurchaseDaoTest {
                     userId = 2,
                     productName = "salmon",
                     price = 3.2,
+                    date = DateTime.now()
                 )
 
                 purchaseDao.updateById(nonExistingId, newPurchase)

@@ -32,6 +32,7 @@ fun mapToPurchase(it: ResultRow) = Purchase(
     userId = it[Purchases.userId],
     productName = it[Purchases.productName],
     price = it[Purchases.price],
+    date = it[Purchases.date]
 )
 
 fun mapToSleep(it: ResultRow) = Sleep(

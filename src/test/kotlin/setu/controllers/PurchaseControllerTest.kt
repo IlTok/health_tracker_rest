@@ -3,6 +3,7 @@ package setu.controllers
 import kong.unirest.HttpResponse
 import kong.unirest.JsonNode
 import kong.unirest.Unirest
+import org.joda.time.DateTime
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -51,6 +52,7 @@ class PurchaseControllerTest {
         userId: Int,
         productName: String,
         price: Double,
+        date: DateTime,
     ): HttpResponse<JsonNode> {
         return Unirest.patch("$origin/api/purchases/${id}")
             .body(
@@ -58,7 +60,8 @@ class PurchaseControllerTest {
                 {
                   "userId":"$userId",
                   "productName":"$productName",
-                  "price":"$price"
+                  "price":"$price",
+                  "date":"$date"
                 }
             """.trimIndent()
             ).asJson()
@@ -68,6 +71,7 @@ class PurchaseControllerTest {
         userId: Int,
         productName: String,
         price: Double,
+        date: DateTime,
     ): HttpResponse<JsonNode> {
         return Unirest.post("$origin/api/purchases")
             .body(
@@ -75,18 +79,19 @@ class PurchaseControllerTest {
                 {
                   "userId":"$userId",
                   "productName":"$productName",
-                  "price":"$price"
+                  "price":"$price",
+                  "date":"$date"
                 }
             """.trimIndent()
             ).asJson()
     }
 
     private fun addThreePurchases(userId: Int, productName: String): List<HttpResponse<JsonNode>> {
-        val purchaseResponse1 = addPurchase(userId, productName, testingPrice1)
+        val purchaseResponse1 = addPurchase(userId, productName, testingPrice1, DateTime.now())
         assertEquals(201, purchaseResponse1.status)
-        val purchaseResponse2 = addPurchase(userId, productName, testingPrice2)
+        val purchaseResponse2 = addPurchase(userId, productName, testingPrice2, DateTime.now())
         assertEquals(201, purchaseResponse2.status)
-        val purchaseResponse3 = addPurchase(userId, productName, testingPrice3)
+        val purchaseResponse3 = addPurchase(userId, productName, testingPrice3, DateTime.now())
         assertEquals(201, purchaseResponse3.status)
         return listOf(purchaseResponse1, purchaseResponse2, purchaseResponse3)
     }
@@ -96,7 +101,7 @@ class PurchaseControllerTest {
 
         @Test
         fun `write purchase, returns 404 response`() {
-            val purchaseResponse1 = addPurchase(nonExistingId, nonExistingProductName, testingPrice1)
+            val purchaseResponse1 = addPurchase(nonExistingId, nonExistingProductName, testingPrice1, DateTime.now())
             assertEquals(404, purchaseResponse1.status)
         }
     }
@@ -131,7 +136,7 @@ class PurchaseControllerTest {
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
-            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice)
+            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice, DateTime.now())
             assertEquals(201, purchaseResponse.status)
 
             val retrievedPurchase = jsonToObject<Purchase>(purchaseResponse.body.toString())
@@ -139,9 +144,9 @@ class PurchaseControllerTest {
             assertEquals(200, response.status)
             assertEquals(retrievedProduct.name, retrievedPurchase.productName)
 
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
             deletePurchaseById(retrievedPurchase.id)
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
@@ -172,11 +177,11 @@ class PurchaseControllerTest {
             val retrievedPurchase = jsonNodeToObject<Array<Purchase>>(response)
             assertEquals(3, retrievedPurchase.size)
 
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
             for (i in addedResponses) {
                 deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
             }
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
@@ -219,11 +224,11 @@ class PurchaseControllerTest {
             val retrievedPurchase = jsonNodeToObject<Array<Purchase>>(response)
             assertEquals(3, retrievedPurchase.size)
 
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
             for (i in addedResponses) {
                 deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
             }
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
@@ -278,11 +283,11 @@ class PurchaseControllerTest {
                 assertEquals(true, j.price < testingPrice)
             }
 
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
             for (i in addedResponses) {
                 deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
             }
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
@@ -320,11 +325,11 @@ class PurchaseControllerTest {
                 assertEquals(true, j.price > testingPrice)
             }
 
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
             for (i in addedResponses) {
                 deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
             }
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
@@ -353,25 +358,25 @@ class PurchaseControllerTest {
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
-            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice)
+            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice, DateTime.now())
             assertEquals(201, purchaseResponse.status)
             val retrievedPurchase = jsonToObject<Purchase>(purchaseResponse.body.toString())
 
-            val updateResponse = updatePurchase(retrievedPurchase.id, retrievedUser.id, retrievedProduct.name, newPrice)
+            val updateResponse = updatePurchase(retrievedPurchase.id, retrievedUser.id, retrievedProduct.name, newPrice, DateTime.now())
             assertEquals(204, updateResponse.status)
             val response = retrievePurchaseById(retrievedPurchase.id)
             assertEquals(200, response.status)
             val retrievedResponse = jsonToObject<Purchase>(response.body.toString())
             assertEquals(newPrice, retrievedResponse.price)
 
-            userControllerTest.deleteUser(retrievedUser.id)
-            productControllerTest.deleteProductByName(retrievedProduct.name)
             deletePurchaseById(retrievedPurchase.id)
+            productControllerTest.deleteProductByName(retrievedProduct.name)
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test
         fun `update purchase by Id that doesn't exist, returns 404 response`() {
-            val response = updatePurchase(nonExistingId, nonExistingUserId, nonExistingProductName, testingPrice)
+            val response = updatePurchase(nonExistingId, nonExistingUserId, nonExistingProductName, testingPrice, DateTime.now())
             assertEquals(404, response.status)
         }
     }
@@ -395,13 +400,13 @@ class PurchaseControllerTest {
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
-            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice)
+            val purchaseResponse = addPurchase(retrievedUser.id, retrievedProduct.name, testingPrice, DateTime.now())
             assertEquals(201, purchaseResponse.status)
             val retrievedPurchase = jsonToObject<Purchase>(purchaseResponse.body.toString())
 
             assertEquals(204, deletePurchaseById(retrievedPurchase.id).status)
-            userControllerTest.deleteUser(retrievedUser.id)
             productControllerTest.deleteProductByName(retrievedProduct.name)
+            userControllerTest.deleteUser(retrievedUser.id)
         }
 
         @Test

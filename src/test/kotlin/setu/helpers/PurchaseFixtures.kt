@@ -1,5 +1,6 @@
 package setu.helpers
 
+import org.joda.time.DateTime
 import setu.domain.Purchase
 
 const val existingId = 1
@@ -20,18 +21,21 @@ val purchases = arrayListOf<Purchase>(
         userId = 1,
         productName = "cheese",
         price = 0.5,
+        date = DateTime.now()
     ),
     Purchase(
         id = 2,
         userId = 1,
         productName = "beef",
         price = 1.5,
+        date = DateTime.now()
     ),
     Purchase(
         id = 3,
         userId = 2,
         productName = "beef",
         price = 2.2,
+        date = DateTime.now()
     ),
 )
 
@@ -40,4 +44,5 @@ val purchaseEqualPrice = Purchase(
     userId = 3,
     productName = "cheese",
     price = testingPrice,
+    date = DateTime.now()
 )
