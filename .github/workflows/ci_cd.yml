@@ -1,10 +1,6 @@
 name: CI/CD
 
-on:
-  push:
-    branches:
-      - main
-      - features
+on: [push, pull_request]
 
 jobs:
 
