@@ -1,8 +1,35 @@
-name: Deploy to Railway
+name: CI/CD
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - features
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Build and test
+      run: ./gradlew build
+
+    - name: Collect JaCoCo coverage
+      run: ./gradlew test jacocoTestReport
+
+    - name: Display coverage
+      run: |
+        cat build/reports/jacoco/test/html/index.html | grep -oP '(?<=<td class="ctr2">)[^<]+' | head -n 1
+
 
   package:
     name: Maven Package (no tests) 
