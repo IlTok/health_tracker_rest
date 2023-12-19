@@ -1,4 +1,4 @@
-name: CI/CD
+name: Deploy to Railway
 
 on: [push, pull_request]
 
@@ -17,25 +17,25 @@ jobs:
           cache: 'maven'
       - name: Maven Package
         run: mvn -B clean package -DskipTests
-        
+
+      # Create Artifact - Jar Builds 
+      - name: Jar Builds
+        uses: actions/upload-artifact@v3
+        with:
+          name: Jar with Builds
+          path: target/*.jar
+
   test:
-    name: Coverage tests
+    name: Maven Tests
     needs: package
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '11'
-
-    - name: Build and test with Maven
-      run: mvn clean test
-
-    - name: Display coverage
-      run: |
-        cat target/site/jacoco/index.html | grep -oP '(?<=<td class="ctr2">)[^<]+' | head -n 1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Maven Verify
+        run: mvn -B clean verify
