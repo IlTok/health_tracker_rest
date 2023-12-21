@@ -81,6 +81,33 @@ object PurchaseController {
         }
     }
 
+    fun getPurchasesByIdByYear(ctx: Context) {
+        val purchases = purchaseDao.findByUserIdByYear(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt()
+        )
+        if (purchases.isNotEmpty()) {
+            ctx.json(purchases)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
+    fun getPurchasesByIdByYearAndMonth(ctx: Context) {
+        val activities = purchaseDao.findByUserIdByYearMonth(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt(),
+            ctx.pathParam("month").toInt(),
+        )
+        if (activities.isNotEmpty()) {
+            ctx.json(activities)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
     fun addPurchase(ctx: Context) {
         val purchase: Purchase = jsonToObject(ctx.body())
         val userId = userDao.findById(purchase.userId)

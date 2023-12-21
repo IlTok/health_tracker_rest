@@ -35,6 +35,14 @@ class PurchaseControllerTest {
         return Unirest.get("$origin/api/purchases/user/${userId}").asJson()
     }
 
+    private fun retrievePurchasesByUserIdByYear(userId: Int, year: Int): HttpResponse<JsonNode> {
+        return Unirest.get("$origin/api/purchases/user/${userId}/${year}").asJson()
+    }
+
+    private fun retrievePurchasesByUserIdByYearMonth(userId: Int, year: Int, month: Int): HttpResponse<JsonNode> {
+        return Unirest.get("$origin/api/purchases/user/${userId}/${year}/${month}").asJson()
+    }
+
     private fun retrievePurchaseById(id: Int): HttpResponse<JsonNode> {
         return Unirest.get("$origin/api/purchases/${id}").asJson()
     }
@@ -96,6 +104,15 @@ class PurchaseControllerTest {
         return listOf(purchaseResponse1, purchaseResponse2, purchaseResponse3)
     }
 
+    private fun setProduct() = productControllerTest
+        .addProduct(
+            testName,
+            productCalories,
+            productProteins,
+            productFats,
+            productCarbohydrates
+        )
+
     @Nested
     inner class WritePurchases {
 
@@ -126,13 +143,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -160,13 +171,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -176,6 +181,100 @@ class PurchaseControllerTest {
             assertEquals(200, response.status)
             val retrievedPurchase = jsonNodeToObject<Array<Purchase>>(response)
             assertEquals(3, retrievedPurchase.size)
+
+            productControllerTest.deleteProductByName(retrievedProduct.name)
+            for (i in addedResponses) {
+                deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
+            }
+            userControllerTest.deleteUser(retrievedUser.id)
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year from the database returns 200 response`() {
+            val userResponse = userControllerTest.addUser(validName, validEmail)
+            assertEquals(201, userResponse.status)
+            val retrievedUser = jsonToObject<User>(userResponse.body.toString())
+
+            val productResponse = setProduct()
+            assertEquals(201, productResponse.status)
+            val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
+
+            val addedResponses = addThreePurchases(retrievedUser.id, retrievedProduct.name)
+
+            val response = retrievePurchasesByUserIdByYear(retrievedUser.id, DateTime.now().year)
+            assertEquals(200, response.status)
+            val retrievedPurchase = jsonNodeToObject<Array<Purchase>>(response)
+            assertEquals(3, retrievedPurchase.size)
+
+            productControllerTest.deleteProductByName(retrievedProduct.name)
+            for (i in addedResponses) {
+                deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
+            }
+            userControllerTest.deleteUser(retrievedUser.id)
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year, year doesn't exist, returns 404 response`() {
+            val userResponse = userControllerTest.addUser(validName, validEmail)
+            assertEquals(201, userResponse.status)
+            val retrievedUser = jsonToObject<User>(userResponse.body.toString())
+
+            val productResponse = setProduct()
+            assertEquals(201, productResponse.status)
+            val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
+
+            val addedResponses = addThreePurchases(retrievedUser.id, retrievedProduct.name)
+
+            val response = retrievePurchasesByUserIdByYear(retrievedUser.id, 0)
+            assertEquals(404, response.status)
+
+            productControllerTest.deleteProductByName(retrievedProduct.name)
+            for (i in addedResponses) {
+                deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
+            }
+            userControllerTest.deleteUser(retrievedUser.id)
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year and Month from the database returns 200 response`() {
+            val userResponse = userControllerTest.addUser(validName, validEmail)
+            assertEquals(201, userResponse.status)
+            val retrievedUser = jsonToObject<User>(userResponse.body.toString())
+
+            val productResponse = setProduct()
+            assertEquals(201, productResponse.status)
+            val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
+
+            val addedResponses = addThreePurchases(retrievedUser.id, retrievedProduct.name)
+
+            val response =
+                retrievePurchasesByUserIdByYearMonth(retrievedUser.id, DateTime.now().year, DateTime.now().monthOfYear)
+
+            assertEquals(200, response.status)
+            val retrievedPurchase = jsonNodeToObject<Array<Purchase>>(response)
+            assertEquals(3, retrievedPurchase.size)
+
+            productControllerTest.deleteProductByName(retrievedProduct.name)
+            for (i in addedResponses) {
+                deletePurchaseById(jsonToObject<Purchase>(i.body.toString()).id)
+            }
+            userControllerTest.deleteUser(retrievedUser.id)
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year and Month, year doesn't exist, returns 404 response`() {
+            val userResponse = userControllerTest.addUser(validName, validEmail)
+            assertEquals(201, userResponse.status)
+            val retrievedUser = jsonToObject<User>(userResponse.body.toString())
+
+            val productResponse = setProduct()
+            assertEquals(201, productResponse.status)
+            val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
+
+            val addedResponses = addThreePurchases(retrievedUser.id, retrievedProduct.name)
+
+            val response = retrievePurchasesByUserIdByYearMonth(retrievedUser.id, DateTime.now().year, 0)
+            assertEquals(404, response.status)
 
             productControllerTest.deleteProductByName(retrievedProduct.name)
             for (i in addedResponses) {
@@ -207,13 +306,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -238,13 +331,7 @@ class PurchaseControllerTest {
 
         @Test
         fun `get purchase by Product, product exist, but purchase don't, returns empty array, 404 response`() {
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -260,13 +347,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -302,13 +383,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -348,13 +423,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 
@@ -362,7 +431,8 @@ class PurchaseControllerTest {
             assertEquals(201, purchaseResponse.status)
             val retrievedPurchase = jsonToObject<Purchase>(purchaseResponse.body.toString())
 
-            val updateResponse = updatePurchase(retrievedPurchase.id, retrievedUser.id, retrievedProduct.name, newPrice, DateTime.now())
+            val updateResponse =
+                updatePurchase(retrievedPurchase.id, retrievedUser.id, retrievedProduct.name, newPrice, DateTime.now())
             assertEquals(204, updateResponse.status)
             val response = retrievePurchaseById(retrievedPurchase.id)
             assertEquals(200, response.status)
@@ -376,7 +446,8 @@ class PurchaseControllerTest {
 
         @Test
         fun `update purchase by Id that doesn't exist, returns 404 response`() {
-            val response = updatePurchase(nonExistingId, nonExistingUserId, nonExistingProductName, testingPrice, DateTime.now())
+            val response =
+                updatePurchase(nonExistingId, nonExistingUserId, nonExistingProductName, testingPrice, DateTime.now())
             assertEquals(404, response.status)
         }
     }
@@ -390,13 +461,7 @@ class PurchaseControllerTest {
             assertEquals(201, userResponse.status)
             val retrievedUser = jsonToObject<User>(userResponse.body.toString())
 
-            val productResponse = productControllerTest.addProduct(
-                testName,
-                productCalories,
-                productProteins,
-                productFats,
-                productCarbohydrates
-            )
+            val productResponse = setProduct()
             assertEquals(201, productResponse.status)
             val retrievedProduct = jsonToObject<Product>(productResponse.body.toString())
 

@@ -40,6 +40,16 @@ class SleepDao {
         return sleepList
     }
 
+    fun findByUserIdByYear(userId: Int, year: Int)
+            = findByUserId(userId).filter {
+        it.date.year == year
+    }
+
+    fun findByUserIdByYearMonth(userId: Int, year: Int, month: Int)
+            = findByUserIdByYear(userId, year).filter {
+        it.date.monthOfYear == month
+    }
+
     fun save(sleep: Sleep): Int {
         return transaction {
             Sleeps.insert {

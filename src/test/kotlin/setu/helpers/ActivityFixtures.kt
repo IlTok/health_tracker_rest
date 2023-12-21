@@ -10,7 +10,7 @@ val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
 
 val activities = arrayListOf<Activity>(
     Activity(
-        description = "Running",
+        description = "Running Test",
         duration = 15.5,
         calories = 120,
         started = DateTime.now(),
@@ -18,7 +18,7 @@ val activities = arrayListOf<Activity>(
         id = 1,
     ),
     Activity(
-        description = "Jumping",
+        description = "Jumping Test",
         duration = 28.2,
         calories = 150,
         started = DateTime.now(),
@@ -26,7 +26,7 @@ val activities = arrayListOf<Activity>(
         id = 2,
     ),
     Activity(
-        description = "Bike",
+        description = "Bike Test",
         duration = 75.1,
         calories = 70,
         started = DateTime.now(),
@@ -34,7 +34,7 @@ val activities = arrayListOf<Activity>(
         id = 3,
     ),
     Activity(
-        description = "Gym",
+        description = "Gym Test",
         duration = 55.7,
         calories = 190,
         started = DateTime.now(),

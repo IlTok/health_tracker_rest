@@ -9,4 +9,4 @@ data class Activity(
     var calories: Int,
     var started: DateTime,
     var userId: Int
-)
+) : MainDataClass

@@ -39,6 +39,33 @@ object SleepController {
         ctx.json(sleep)
     }
 
+    fun getSleepsByIdByYear(ctx: Context) {
+        val sleeps = sleepDao.findByUserIdByYear(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt()
+        )
+        if (sleeps.isNotEmpty()) {
+            ctx.json(sleeps)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
+    fun getSleepsByIdByYearAndMonth(ctx: Context) {
+        val sleeps = sleepDao.findByUserIdByYearMonth(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt(),
+            ctx.pathParam("month").toInt(),
+        )
+        if (sleeps.isNotEmpty()) {
+            ctx.json(sleeps)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
     fun addSleep(ctx: Context) {
         val sleep: Sleep = jsonToObject(ctx.body())
         val sleepId = sleepDao.save(sleep)

@@ -38,6 +38,14 @@ class SleepControllerTest {
         return Unirest.get(origin + "/api/sleeps/user/${id}").asJson()
     }
 
+    private fun retrieveSleepsByUserIdByYear(userId: Int, year: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/sleeps/user/${userId}/${year}").asJson()
+    }
+
+    private fun retrieveSleepsByUserIdByYearMonth(userId: Int, year: Int, month: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/sleeps/user/${userId}/${year}/${month}").asJson()
+    }
+
     private fun deleteSleepById(id: Int): HttpResponse<String> {
         return Unirest.delete("$origin/api/sleeps/sleep/$id").asString()
     }
@@ -91,6 +99,93 @@ class SleepControllerTest {
             } else {
                 Assertions.assertEquals(404, response.status)
             }
+        }
+
+        @Test
+        fun `get sleeps by user, returns 200 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+
+            val sleeps = setSleeps(addedUser.id)
+
+            val response = retrieveSleepsByUserId(addedUser.id)
+            Assertions.assertEquals(200, response.status)
+
+            for (i in sleeps) {
+                val retrievedSleep: Sleep = jsonToObject(i.body.toString())
+                Assertions.assertEquals(204, deleteSleepById(retrievedSleep.id).status)
+            }
+
+            Assertions.assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get sleeps by user by year, returns 200 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+
+            val sleeps = setSleeps(addedUser.id)
+
+            val response = retrieveSleepsByUserIdByYear(addedUser.id, DateTime.now().year)
+            Assertions.assertEquals(200, response.status)
+
+            for (i in sleeps) {
+                val retrievedSleep: Sleep = jsonToObject(i.body.toString())
+                Assertions.assertEquals(204, deleteSleepById(retrievedSleep.id).status)
+            }
+
+            Assertions.assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get sleeps by user by year and month, returns 200 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+
+            val sleeps = setSleeps(addedUser.id)
+
+            val response =
+                retrieveSleepsByUserIdByYearMonth(addedUser.id, DateTime.now().year, DateTime.now().monthOfYear)
+            Assertions.assertEquals(200, response.status)
+
+            for (i in sleeps) {
+                val retrievedSleep: Sleep = jsonToObject(i.body.toString())
+                Assertions.assertEquals(204, deleteSleepById(retrievedSleep.id).status)
+            }
+
+            Assertions.assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get sleeps by user by year, returns 404 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+
+            val sleeps = setSleeps(addedUser.id)
+
+            val response = retrieveSleepsByUserIdByYear(addedUser.id, 0)
+            Assertions.assertEquals(404, response.status)
+
+            for (i in sleeps) {
+                val retrievedSleep: Sleep = jsonToObject(i.body.toString())
+                Assertions.assertEquals(204, deleteSleepById(retrievedSleep.id).status)
+            }
+
+            Assertions.assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get sleeps by user by year and month, returns 404 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+
+            val sleeps = setSleeps(addedUser.id)
+
+            val response =
+                retrieveSleepsByUserIdByYearMonth(addedUser.id, DateTime.now().year, 0)
+            Assertions.assertEquals(404, response.status)
+
+            for (i in sleeps) {
+                val retrievedSleep: Sleep = jsonToObject(i.body.toString())
+                Assertions.assertEquals(204, deleteSleepById(retrievedSleep.id).status)
+            }
+
+            Assertions.assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
         }
 
         @Test
@@ -167,7 +262,8 @@ class SleepControllerTest {
 
             val sleeps = setSleeps(addedUser.id)
 
-            val updatedSleep = updateSleep(unexistingSleepId, Random.nextDouble(3.0, 10.0), DateTime.now(), addedUser.id)
+            val updatedSleep =
+                updateSleep(unexistingSleepId, Random.nextDouble(3.0, 10.0), DateTime.now(), addedUser.id)
             Assertions.assertEquals(404, updatedSleep.status)
 
             for (i in sleeps) {

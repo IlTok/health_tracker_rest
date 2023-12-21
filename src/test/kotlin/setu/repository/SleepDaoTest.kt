@@ -3,6 +3,7 @@ package setu.repository
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
@@ -107,11 +108,43 @@ class SleepDaoTest {
             transaction {
                 val sleepDao = populateSleepTable()
                 var count = 0
-                for (i in sleeps){
+                for (i in sleeps) {
                     if (i.userId == sleep1.userId)
                         count++
                 }
                 Assertions.assertEquals(count, sleepDao.findByUserId(sleep1.userId).size)
+            }
+        }
+
+        @Test
+        fun `get sleeps by userId and by Year that exist`() {
+            transaction {
+                val sleepDao = populateSleepTable()
+                Assertions.assertEquals(2, sleepDao.findByUserIdByYear(1, DateTime.now().year).size)
+            }
+        }
+
+        @Test
+        fun `get sleeps by userId and by Year that doesn't exist`() {
+            transaction {
+                val sleepDao = populateSleepTable()
+                Assertions.assertEquals(0, sleepDao.findByUserIdByYear(1, 0).size)
+            }
+        }
+
+        @Test
+        fun `get sleeps by userId and by Year and Month that exist`() {
+            transaction {
+                val sleepDao = populateSleepTable()
+                Assertions.assertEquals(2, sleepDao.findByUserIdByYearMonth(1, DateTime.now().year, DateTime.now().monthOfYear).size)
+            }
+        }
+
+        @Test
+        fun `get sleeps by userId and by Year and Month that doesn't exist`() {
+            transaction {
+                val sleepDao = populateSleepTable()
+                Assertions.assertEquals(0, sleepDao.findByUserIdByYearMonth(1, DateTime.now().year, 0).size)
             }
         }
     }
