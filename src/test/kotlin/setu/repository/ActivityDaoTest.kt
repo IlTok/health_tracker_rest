@@ -119,6 +119,50 @@ class ActivityDaoTest {
                 Assertions.assertEquals(activity3, activityDao.findById(3))
             }
         }
+
+        @Test
+        fun `get activities by User Id and by Year that exists`() {
+            transaction {
+                val activityDao = populateActivityTable()
+                Assertions.assertEquals(
+                    2,
+                    activityDao.findByUserIdByYear(1, DateTime.now().year).size
+                )
+            }
+        }
+
+        @Test
+        fun `get activities by User Id and by Year that doesn't exist`() {
+            transaction {
+                val activityDao = populateActivityTable()
+                Assertions.assertEquals(
+                    0,
+                    activityDao.findByUserIdByYear(1, 0).size
+                )
+            }
+        }
+
+        @Test
+        fun `get activities by User Id and by Year and Month that exists`() {
+            transaction {
+                val activityDao = populateActivityTable()
+                Assertions.assertEquals(
+                    2,
+                    activityDao.findByUserIdByYearMonth(1, DateTime.now().year, DateTime.now().monthOfYear).size
+                )
+            }
+        }
+
+        @Test
+        fun `get activities by User Id and by Year and Month that doesn't exist`() {
+            transaction {
+                val activityDao = populateActivityTable()
+                Assertions.assertEquals(
+                    0,
+                    activityDao.findByUserIdByYearMonth(1, DateTime.now().year, 0).size
+                )
+            }
+        }
     }
 
     @Nested

@@ -202,6 +202,42 @@ class PurchaseDaoTest {
                 Assertions.assertEquals(0, purchaseDao.findPurchasesWherePriceLessThan(testingPrice).size)
             }
         }
+
+        @Test
+        fun `get purchases by User Id and by Year that exist`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findByUserIdByYear(purchase1.userId, DateTime.now().year)
+                Assertions.assertEquals(2, purchases.size)
+            }
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year that don't exist`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findByUserIdByYear(purchase1.userId, 0)
+                Assertions.assertEquals(0, purchases.size)
+            }
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year and Month that exist`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findByUserIdByYearMonth(purchase1.userId, DateTime.now().year, DateTime.now().monthOfYear)
+                Assertions.assertEquals(2, purchases.size)
+            }
+        }
+
+        @Test
+        fun `get purchases by User Id and by Year and Month that don't exist`() {
+            transaction {
+                val purchaseDao = populatePurchaseTable()
+                val purchases = purchaseDao.findByUserIdByYearMonth(purchase1.userId, DateTime.now().year, 0)
+                Assertions.assertEquals(0, purchases.size)
+            }
+        }
     }
 
     @Nested

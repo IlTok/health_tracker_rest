@@ -31,6 +31,14 @@ class ActivityControllerTest {
         return Unirest.get(origin + "/api/users/${id}/activities").asJson()
     }
 
+    private fun retrieveActivitiesByUserIdByYear(id: Int, year: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/users/${id}/activities/${year}").asJson()
+    }
+
+    private fun retrieveActivitiesByUserIdByYearMonth(id: Int, year: Int, month: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/users/${id}/activities/${year}/${month}").asJson()
+    }
+
     private fun retrieveActivityByActivityId(id: Int): HttpResponse<JsonNode> {
         return Unirest.get(origin + "/api/activities/${id}").asJson()
     }
@@ -121,6 +129,102 @@ class ActivityControllerTest {
             //After - delete the added user and assert a 204 is returned (activities are cascade deleted)
             assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
         }
+
+        @Test
+        fun `get all activities by user id and by year, returns 200 response`() {
+            //Arrange - add a user and 3 associated activities that we plan to retrieve
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            addActivity(
+                activities[0].description, activities[0].duration,
+                activities[0].calories, activities[0].started, addedUser.id
+            )
+            addActivity(
+                activities[1].description, activities[1].duration,
+                activities[1].calories, activities[1].started, addedUser.id
+            )
+            addActivity(
+                activities[2].description, activities[2].duration,
+                activities[2].calories, activities[2].started, addedUser.id
+            )
+
+            val response = retrieveActivitiesByUserIdByYear(addedUser.id, DateTime.now().year)
+            assertEquals(200, response.status)
+            val retrievedActivities = jsonNodeToObject<Array<Activity>>(response)
+            assertEquals(3, retrievedActivities.size)
+
+            assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get all activities by user id and by year, returns 404 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            addActivity(
+                activities[0].description, activities[0].duration,
+                activities[0].calories, activities[0].started, addedUser.id
+            )
+            addActivity(
+                activities[1].description, activities[1].duration,
+                activities[1].calories, activities[1].started, addedUser.id
+            )
+            addActivity(
+                activities[2].description, activities[2].duration,
+                activities[2].calories, activities[2].started, addedUser.id
+            )
+
+            val response = retrieveActivitiesByUserIdByYear(addedUser.id, 0)
+            assertEquals(404, response.status)
+
+            assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get all activities by user id and by year and month, returns 200 response`() {
+            //Arrange - add a user and 3 associated activities that we plan to retrieve
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            addActivity(
+                activities[0].description, activities[0].duration,
+                activities[0].calories, activities[0].started, addedUser.id
+            )
+            addActivity(
+                activities[1].description, activities[1].duration,
+                activities[1].calories, activities[1].started, addedUser.id
+            )
+            addActivity(
+                activities[2].description, activities[2].duration,
+                activities[2].calories, activities[2].started, addedUser.id
+            )
+
+            val response = retrieveActivitiesByUserIdByYearMonth(addedUser.id, DateTime.now().year, DateTime.now().monthOfYear)
+            assertEquals(200, response.status)
+            val retrievedActivities = jsonNodeToObject<Array<Activity>>(response)
+            assertEquals(3, retrievedActivities.size)
+
+            assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get all activities by user id and by year and month, returns 404 response`() {
+            val addedUser: User = jsonToObject(UserControllerTest().addUser(validName, validEmail).body.toString())
+            addActivity(
+                activities[0].description, activities[0].duration,
+                activities[0].calories, activities[0].started, addedUser.id
+            )
+            addActivity(
+                activities[1].description, activities[1].duration,
+                activities[1].calories, activities[1].started, addedUser.id
+            )
+            addActivity(
+                activities[2].description, activities[2].duration,
+                activities[2].calories, activities[2].started, addedUser.id
+            )
+
+            val response = retrieveActivitiesByUserIdByYearMonth(addedUser.id, DateTime.now().year, 0)
+            assertEquals(404, response.status)
+
+            assertEquals(204, UserControllerTest().deleteUser(addedUser.id).status)
+        }
+
+
 
         @Test
         fun `get all activities by user id when no activities exist returns 404 response`() {
