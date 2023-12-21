@@ -22,14 +22,10 @@ object ActivityController {
     }
 
     fun getActivitiesByUserId(ctx: Context) {
-        if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
-            val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
-            if (activities.isNotEmpty()) {
-                ctx.json(activities)
-                ctx.status(200)
-            } else {
-                ctx.status(404)
-            }
+        val activities = activityDao.findByUserId(ctx.pathParam("user-id").toInt())
+        if (activities.isNotEmpty()) {
+            ctx.json(activities)
+            ctx.status(200)
         } else {
             ctx.status(404)
         }
@@ -39,6 +35,33 @@ object ActivityController {
         val activity = activityDao.findById((ctx.pathParam("activity-id").toInt()))
         if (activity != null) {
             ctx.json(activity)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
+    fun getActivitiesByIdByYear(ctx: Context) {
+        val activities = activityDao.findByUserIdByYear(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt()
+        )
+        if (activities.isNotEmpty()) {
+            ctx.json(activities)
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+    }
+
+    fun getActivitiesByIdByYearAndMonth(ctx: Context) {
+        val activities = activityDao.findByUserIdByYearMonth(
+            ctx.pathParam("user-id").toInt(),
+            ctx.pathParam("year").toInt(),
+            ctx.pathParam("month").toInt(),
+        )
+        if (activities.isNotEmpty()) {
+            ctx.json(activities)
             ctx.status(200)
         } else {
             ctx.status(404)

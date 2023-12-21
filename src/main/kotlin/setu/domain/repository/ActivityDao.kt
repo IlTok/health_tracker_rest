@@ -18,16 +18,26 @@ class ActivityDao {
         return activityList
     }
 
-    fun findByUserId(userDd: Int): ArrayList<Activity> {
+    fun findByUserId(userId: Int): ArrayList<Activity> {
         val activityList: ArrayList<Activity> = arrayListOf()
         transaction {
             Activities
-                .select { Activities.userId eq userDd }
+                .select { Activities.userId eq userId }
                 .map {
                     activityList.add(mapToActivity(it))
                 }
         }
         return activityList
+    }
+
+    fun findByUserIdByYear(userId: Int, year: Int)
+        = findByUserId(userId).filter {
+            it.started.year == year
+    }
+
+    fun findByUserIdByYearMonth(userId: Int, year: Int, month: Int)
+            = findByUserIdByYear(userId, year).filter {
+                it.started.monthOfYear == month
     }
 
     fun save(activity: Activity): Int {

@@ -5,6 +5,7 @@ import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.json.JavalinJackson
 import io.javalin.vue.VueComponent
 import setu.controllers.*
+import setu.domain.Sleep
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
@@ -54,6 +55,12 @@ class JavalinConfig {
                     path("/activities") {
                         get(ActivityController::getActivitiesByUserId)
                         delete(ActivityController::deleteActivitiesByUserId)
+                        path("/{year}") {
+                            get(ActivityController::getActivitiesByIdByYear)
+                            path("/{month}"){
+                                get(ActivityController::getActivitiesByIdByYearAndMonth)
+                            }
+                        }
                     }
                 }
                 path("/email/{email}") {
@@ -104,6 +111,12 @@ class JavalinConfig {
                 }
                 path("/user/{user-id}"){
                     get(PurchaseController::getPurchasesByUserId)
+                    path("/{year}") {
+                        get(PurchaseController::getPurchasesByIdByYear)
+                        path("/{month}"){
+                            get(PurchaseController::getPurchasesByIdByYearAndMonth)
+                        }
+                    }
                 }
                 path("/product/{product-name}"){
                     get(PurchaseController::getPurchasesByProductName)
@@ -114,11 +127,23 @@ class JavalinConfig {
                 post(SleepController::addSleep)
                 path("/user/{user-id}"){
                     get(SleepController::getSleepsByUserId)
+                    path("/{year}") {
+                        get(SleepController::getSleepsByIdByYear)
+                        path("/{month}"){
+                            get(SleepController::getSleepsByIdByYearAndMonth)
+                        }
+                    }
                 }
                 path("/sleep/{sleep-id}"){
                     get(SleepController::getSleepById)
                     patch(SleepController::updateSleep)
                     delete(SleepController::deleteSleep)
+                }
+            }
+            path("/api/info/user/{user-id}"){
+                get(InfoController::getAllUserInfo)
+                path("/{year}/{month}"){
+                    get(InfoController::getUserInfoDate)
                 }
             }
         }
