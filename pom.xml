@@ -203,12 +203,6 @@
             <version>4.13.2</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- standalone jar with shaded dependencies (renames dependencies to help avoid
              clashing with other versions of dependencies) -->
         <dependency>
