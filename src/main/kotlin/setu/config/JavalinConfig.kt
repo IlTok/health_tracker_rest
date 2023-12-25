@@ -140,10 +140,13 @@ class JavalinConfig {
                     delete(SleepController::deleteSleep)
                 }
             }
-            path("/api/info/user/{user-id}"){
-                get(InfoController::getAllUserInfo)
-                path("/{year}/{month}"){
-                    get(InfoController::getUserInfoDate)
+            path("/api/dishes"){
+                get(DishController::getAllDishes)
+                post(DishController::addDish)
+                path("{dish-name}"){
+                    get(DishController::getDishByName)
+                    patch(DishController::updateDish)
+                    delete(DishController::deleteDish)
                 }
             }
         }

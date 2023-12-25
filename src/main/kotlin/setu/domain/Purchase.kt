@@ -8,4 +8,4 @@ data class Purchase(
     var productName: String,
     var price: Double,
     var date: DateTime,
-) : MainDataClass
+)

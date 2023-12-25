@@ -41,3 +41,10 @@ fun mapToSleep(it: ResultRow) = Sleep(
     date = it[Sleeps.date],
     userId = it[Sleeps.userId],
 )
+
+fun mapToDish(it: ResultRow) = Dish(
+    name = it[Dishes.name],
+    ingredient = it[Dishes.ingredient],
+    weight = it[Dishes.weight],
+    calories = it[Dishes.calories],
+)
