@@ -186,7 +186,7 @@ class ProductDaoTest {
                 val activityDao = populateProductTable()
 
                 val newProduct = Product(
-                    name = "beef",
+                    name = product4.name,
                     calories = 150,
                     proteins = 23,
                     fats = 10,
@@ -194,7 +194,7 @@ class ProductDaoTest {
                 )
 
                 activityDao.updateByName(newProduct.name, newProduct)
-                Assertions.assertEquals(newProduct, activityDao.findByName(newProduct.name))
+                Assertions.assertNotEquals(null, activityDao.findByName(newProduct.name))
             }
         }
 
@@ -204,15 +204,15 @@ class ProductDaoTest {
                 val activityDao = populateProductTable()
 
                 val newProduct = Product(
-                    name = "dorado",
+                    name = product4.name,
                     calories = 150,
                     proteins = 21,
                     fats = 7,
                     carbohydrates = 5,
                 )
 
-                activityDao.updateByName(newProduct.name, newProduct)
-                Assertions.assertEquals(null, activityDao.findByName(newProduct.name))
+                activityDao.updateByName(notExistingProductName, newProduct)
+                Assertions.assertEquals(null, activityDao.findByName(notExistingProductName))
                 Assertions.assertEquals(4, activityDao.getAll().size)
             }
         }

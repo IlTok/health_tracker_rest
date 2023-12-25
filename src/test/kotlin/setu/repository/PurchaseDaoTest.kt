@@ -277,7 +277,7 @@ class PurchaseDaoTest {
                 val newPurchase = Purchase(
                     id = existingId,
                     userId = 2,
-                    productName = "salmon",
+                    productName = products[3].name,
                     price = 3.2,
                     date = DateTime.now()
                 )
@@ -295,7 +295,7 @@ class PurchaseDaoTest {
                 val newPurchase = Purchase(
                     id = nonExistingId,
                     userId = 2,
-                    productName = "salmon",
+                    productName = products[3].name,
                     price = 3.2,
                     date = DateTime.now()
                 )
