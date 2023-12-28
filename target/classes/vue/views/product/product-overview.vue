@@ -139,7 +139,7 @@ app.component("product-overview", {
             calories: this.formData.calories,
             proteins: this.formData.proteins,
             fats: this.formData.fats,
-            carbohydrates: this.formData.carbohydrates,
+            carbohydrates: this.formData.carbohydrates
           })
           .then(response => {
             this.products.push(response.data)

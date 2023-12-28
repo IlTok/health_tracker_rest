@@ -126,7 +126,7 @@ app.component("purchase-overview", {
             userId: this.formData.userId,
             productName: this.formData.productName,
             price: this.formData.price,
-            date: this.formData.date
+            date: this.formData.date,
           })
           .then(response => {
             this.purchases.push(response.data)

@@ -117,7 +117,6 @@ app.component("product-overview", {
           .then(res => this.products = res.data)
           .catch(() => alert("Error while fetching Products"));
     },
-
     deleteProduct: function (product, index) {
       if (confirm('Are you sure you want to delete this product? This action cannot be undone.', 'Warning')) {
         const productName = product.name;
@@ -130,7 +129,6 @@ app.component("product-overview", {
             });
       }
     },
-
     addProduct: function () {
       const url = `/api/products`;
       axios.post(url,
@@ -139,7 +137,7 @@ app.component("product-overview", {
             calories: this.formData.calories,
             proteins: this.formData.proteins,
             fats: this.formData.fats,
-            carbohydrates: this.formData.carbohydrates
+            carbohydrates: this.formData.carbohydrates,
           })
           .then(response => {
             this.products.push(response.data)

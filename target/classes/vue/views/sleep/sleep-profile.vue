@@ -90,7 +90,6 @@ app.component("sleep-profile", {
   },
 
   methods: {
-
     updateSleep: function () {
       const sleepId = this.$javalin.pathParams["sleep-id"];
       const url = `/api/sleeps/sleep/${sleepId}`
@@ -107,7 +106,6 @@ app.component("sleep-profile", {
           })
       alert("Sleep was updated!")
     },
-
     deleteSleep: function () {
       if (confirm("Do you really want to delete?")) {
         const sleepId = this.$javalin.pathParams["sleep-id"];

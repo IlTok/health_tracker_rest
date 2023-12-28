@@ -97,7 +97,6 @@ app.component("purchase-profile", {
   },
 
   methods: {
-
     updatePurchase: function () {
       const purchaseId = this.$javalin.pathParams["purchase-id"];
       const url = `/api/purchases/${purchaseId}`
@@ -106,7 +105,7 @@ app.component("purchase-profile", {
             userId: this.formData.userId,
             productName: this.formData.productName,
             price: this.formData.price,
-            date: this.formData.date,
+            date: this.formData.date
           })
           .then(response =>
               this.purchase.push(response.data))
@@ -115,7 +114,6 @@ app.component("purchase-profile", {
           })
       alert("Purchase was updated!")
     },
-
     deletePurchase: function () {
       if (confirm("Do you really want to delete?")) {
         const purchaseId = this.$javalin.pathParams["purchase-id"];

@@ -90,7 +90,6 @@ app.component("dish-profile", {
   },
 
   methods: {
-
     updateDish: function () {
       const dishName = this.$javalin.pathParams["dish-name"];
       const url = `/api/dishes/${dishName}`
@@ -99,7 +98,7 @@ app.component("dish-profile", {
             name: this.formData.name,
             ingredient: this.formData.ingredient,
             weight: this.formData.weight,
-            calories: this.formData.calories,
+            calories: this.formData.calories
           })
           .then(response =>
               this.dish.push(response.data))
@@ -108,7 +107,6 @@ app.component("dish-profile", {
           })
       alert("Dish was updated!")
     },
-
     deleteDish: function () {
       if (confirm("Do you really want to delete?")) {
         const dishName = this.$javalin.pathParams["dish-name"];

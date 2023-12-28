@@ -116,7 +116,6 @@ app.component("product-profile", {
   },
 
   methods: {
-
     updateProduct: function () {
       const productName = this.$javalin.pathParams["product-name"];
       const url = `/api/products/${productName}`
@@ -126,7 +125,7 @@ app.component("product-profile", {
             calories: this.formData.calories,
             proteins: this.formData.proteins,
             fats: this.formData.fats,
-            carbohydrates: this.formData.carbohydrates,
+            carbohydrates: this.formData.carbohydrates
           })
           .then(response =>
               this.product.push(response.data))
@@ -135,7 +134,6 @@ app.component("product-profile", {
           })
       alert("Product was updated!")
     },
-
     deleteProduct: function () {
       if (confirm("Do you really want to delete?")) {
         const productName = this.$javalin.pathParams["product-name"];

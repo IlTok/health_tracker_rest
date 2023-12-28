@@ -104,13 +104,11 @@ app.component("dish-overview", {
     this.fetchDishes();
   },
   methods: {
-
     fetchDishes: function () {
       axios.get("/api/dishes")
           .then(res => this.dishes = res.data)
           .catch(() => alert("Error while fetching Dishes"));
     },
-
     deleteDish: function (dish, index) {
       if (confirm('Are you sure you want to delete this dish? This action cannot be undone.', 'Warning')) {
         const dishName = dish.name;
@@ -123,7 +121,6 @@ app.component("dish-overview", {
             });
       }
     },
-
     addDish: function () {
       const url = `/api/dishes`;
       axios.post(url,

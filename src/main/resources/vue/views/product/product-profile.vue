@@ -125,7 +125,7 @@ app.component("product-profile", {
             calories: this.formData.calories,
             proteins: this.formData.proteins,
             fats: this.formData.fats,
-            carbohydrates: this.formData.carbohydrates
+            carbohydrates: this.formData.carbohydrates,
           })
           .then(response =>
               this.product.push(response.data))

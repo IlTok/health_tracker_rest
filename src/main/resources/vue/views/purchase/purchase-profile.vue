@@ -105,7 +105,7 @@ app.component("purchase-profile", {
             userId: this.formData.userId,
             productName: this.formData.productName,
             price: this.formData.price,
-            date: this.formData.date
+            date: this.formData.date,
           })
           .then(response =>
               this.purchase.push(response.data))
