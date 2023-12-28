@@ -365,6 +365,166 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+                
+  /api/sleeps:
+    get:
+      description: Get all the sleeps
+      responses:
+        200:
+          description: These are all the sleeps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sleep'
+                  
+    post:
+      description: Add a sleep to app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SleepPost'
+      responses:
+         200:
+           description: The sleep has been created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sleep'
+                
+  /api/sleeps/{sleep-id}:
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/SleepIdPath'
+      description: Delete the exist sleep by id
+      responses:
+        200:
+          description: This specefic sleep was deleted by id
+          
+    patch:
+      parameters:
+      - $ref: '#/components/parameters/SleepIdPath'
+      description: Update the existing sleep
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SleepPost'
+      responses:
+        200:
+          description: This specefic sleep was patched by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sleep'
+                
+    get:
+      description: Get a sleep by product Id
+      parameters:
+      - $ref: '#/components/parameters/SleepIdPath'
+      responses:
+        200:
+          description: These are all the sleeps
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Sleep'
+                  
+  /api/sleeps/user/{user-id}:
+    get:
+      description: Get sleeps by user Id
+      parameters:
+      - $ref: '#/components/parameters/UserIdPath'
+      responses:
+        200:
+          description: These are all the sleeps by user Id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sleep'
+                
+  /api/dishes:
+    get:
+      description: Get all the dishes
+      responses:
+        200:
+          description: These are all the dishes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+                  
+    post:
+      description: Add a dish to app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishPost'
+      responses:
+         200:
+           description: The dish has been created
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+                
+  /api/dishes/{dish-name}:
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/DishNamePath'
+      description: Delete the existed dish by id
+      responses:
+        200:
+          description: This specefic dish was deleted by id
+          
+    patch:
+      parameters:
+      - $ref: '#/components/parameters/DishNamePath'
+      description: Update the existing dish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishPost'
+      responses:
+        200:
+          description: This specefic dish was patched by name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+                
+    get:
+      description: Get a dish by name
+      parameters:
+      - $ref: '#/components/parameters/DishNamePath'
+      responses:
+        200:
+          description: These is a dish by name
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Dish'
+                  
+  /api/dishes/ingredient/{product-name}:
+    get:
+      description: Get a dish by product name
+      parameters:
+      - $ref: '#/components/parameters/ProductNamePath'
+      responses:
+        200:
+          description: These is a dish by product name
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Dish'
                   
 components:
 
@@ -423,6 +583,24 @@ components:
       schema:
         type: integer
         example: 2
+        
+    SleepIdPath:
+      in: path
+      name: sleep-id
+      description: Sleep Id path parameter
+      required: true
+      schema:
+        type: integer
+        example: 2
+        
+    DishNamePath:
+      in: path
+      name: dish-name
+      description: Dish name path parameter
+      required: true
+      schema:
+        type: string
+        example: steak
         
   schemas:
   
@@ -553,3 +731,61 @@ components:
         price:
           type: number
           example: 1.2
+          
+    Sleep:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 12
+        duration:
+          type: number
+          example: 8.1
+        date:
+          type: string
+          example: 2021-06-10 06:59:27 +0000
+        userId:
+          type: integer
+          example: 7
+          
+    SleepPost:
+      type: object
+      properties:
+        duration:
+          type: number
+          example: 8.1
+        date:
+          type: string
+          example: 2021-06-10 06:59:27 +0000
+        userId:
+          type: integer
+          example: 7
+          
+    Dish:
+      type: object
+      properties:
+        name:
+          type: string
+          example: steak
+        ingredient:
+          type: string
+          example: steak
+        weight:
+          type: integer
+          example: 350
+        calories:
+          type: integer
+          example: 250
+          
+    DishPost:
+      type: object
+      properties:
+        ingredient:
+          type: string
+          example: steak
+        weight:
+          type: integer
+          example: 350
+        calories:
+          type: integer
+          example: 250
