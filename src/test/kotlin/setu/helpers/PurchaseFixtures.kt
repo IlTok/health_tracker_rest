@@ -19,21 +19,21 @@ val purchases = arrayListOf<Purchase>(
     Purchase(
         id = 1,
         userId = 1,
-        productName = "cheese",
+        productName = "test name 2",
         price = 0.5,
         date = DateTime.now()
     ),
     Purchase(
         id = 2,
         userId = 1,
-        productName = "beef",
+        productName = "test name 1",
         price = 1.5,
         date = DateTime.now()
     ),
     Purchase(
         id = 3,
         userId = 2,
-        productName = "beef",
+        productName = "test name 1",
         price = 2.2,
         date = DateTime.now()
     ),
@@ -42,7 +42,7 @@ val purchases = arrayListOf<Purchase>(
 val purchaseEqualPrice = Purchase(
     id = 4,
     userId = 3,
-    productName = "cheese",
+    productName = "test name 2",
     price = testingPrice,
     date = DateTime.now()
 )

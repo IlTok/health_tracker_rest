@@ -1,7 +1,9 @@
 <template id="app-layout">
   <div class="app-layout">
     <div class="container">
+
       <!-- Start of navbar -->
+
       <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -12,25 +14,59 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
+
             <li class="nav-item active">
               <a class="nav-link" href="/users">
-                Users <span class="sr-only">(current)</span>
+                Users
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/activities">Activities</a>
+
+            <li class="nav-item" active>
+              <a class="nav-link" href="/activities">
+              Activities
+              </a>
             </li>
+
+            <li class="nav-item" active>
+              <a class="nav-link" href="/products">
+              Products
+              </a>
+            </li>
+
+            <li class="nav-item" active>
+              <a class="nav-link" href="/dishes">
+              Dishes
+              </a>
+            </li>
+
+            <li class="nav-item" active>
+              <a class="nav-link" href="/purchases">
+              Purchases
+              </a>
+            </li>
+
+            <li class="nav-item" active>
+              <a class="nav-link" href="/sleeps">
+              Sleeps
+              </a>
+            </li>
+
           </ul>
         </div>
       </nav>
+
       <!--End of nav bar-->
+
       <!--Start of main content area-->
+
       <div class="content mt-3">
         <div class="container-fluid">
           <slot></slot>
         </div>
       </div>
+
       <!--End of main content area-->
+
     </div>
   </div>
 </template>
@@ -41,6 +77,6 @@ app.component("app-layout", {template: "#app-layout"});
 
 <style>
 .navbar{
-  background-color: #e3f2fd;
+  background-color: #fffedf;
 }
 </style>

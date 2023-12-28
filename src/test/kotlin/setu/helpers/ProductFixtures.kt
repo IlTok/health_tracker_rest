@@ -15,28 +15,28 @@ const val testName = "test name"
 
 val products = arrayListOf<Product>(
     Product(
-        name = "beef",
+        name = "test name 1",
         calories = 150,
         proteins = 23,
         fats = 10,
         carbohydrates = 2,
     ),
     Product(
-        name = "cheese",
+        name = "test name 2",
         calories = 250,
         proteins = 25,
         fats = 60,
         carbohydrates = 5,
     ),
     Product(
-        name = "pear",
+        name = "test name 3",
         calories = 60,
         proteins = 1,
         fats = 1,
         carbohydrates = 35,
     ),
     Product(
-        name = "salmon",
+        name = "test name 4",
         calories = 210,
         proteins = 25,
         fats = 35,

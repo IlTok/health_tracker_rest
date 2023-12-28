@@ -7,4 +7,4 @@ data class Sleep(
     var duration: Double,
     var date: DateTime,
     var userId: Int,
-) : MainDataClass
+)
