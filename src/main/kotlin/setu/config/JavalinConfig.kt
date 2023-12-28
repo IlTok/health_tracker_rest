@@ -5,7 +5,6 @@ import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.json.JavalinJackson
 import io.javalin.vue.VueComponent
 import setu.controllers.*
-import setu.domain.Sleep
 import setu.utils.jsonObjectMapper
 
 class JavalinConfig {
@@ -43,7 +42,16 @@ class JavalinConfig {
             get("/", VueComponent("<home-page></home-page>"))
             get("/users", VueComponent("<user-overview></user-overview>"))
             get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
-            get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
+            get("/activities", VueComponent("<activity-overview></activity-overview>"))
+            get("/activities/{activity-id}", VueComponent("<activity-profile></activity-profile>"))
+            get("/products", VueComponent("<product-overview></product-overview>"))
+            get("/products/{product-name}", VueComponent("<product-profile></product-profile>"))
+            get("/purchases", VueComponent("<purchase-overview></purchase-overview>"))
+            get("/purchases/{purchase-id}", VueComponent("<purchase-profile></purchase-profile>"))
+            get("/sleeps", VueComponent("<sleep-overview></sleep-overview>"))
+            get("/sleeps/{sleep-id}", VueComponent("<sleep-profile></sleep-profile>"))
+            get("/dishes", VueComponent("<dish-overview></dish-overview>"))
+            get("/dishes/{dish-name}", VueComponent("<dish-profile></dish-profile>"))
 
             path("/api/users") {
                 get(UserController::getAllUsers)
@@ -143,6 +151,9 @@ class JavalinConfig {
             path("/api/dishes"){
                 get(DishController::getAllDishes)
                 post(DishController::addDish)
+                path("/ingredient/{product-name}"){
+                    get(DishController::getDishesByIngredient)
+                }
                 path("{dish-name}"){
                     get(DishController::getDishByName)
                     patch(DishController::updateDish)
