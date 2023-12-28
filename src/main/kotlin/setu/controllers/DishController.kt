@@ -19,6 +19,16 @@ object DishController {
         ctx.json(dishes)
     }
 
+    fun getDishesByIngredient(ctx: Context) {
+        val dishes = dishDao.findByIngredient(ctx.pathParam("product-name"))
+        if (dishes.isNotEmpty()) {
+            ctx.status(200)
+        } else {
+            ctx.status(404)
+        }
+        ctx.json(dishes)
+    }
+
     fun getDishByName(ctx: Context) {
         val dish = dishDao.findByName(ctx.pathParam("dish-name"))
         if (dish != null) {

@@ -28,6 +28,17 @@ class DishDao {
         }
     }
 
+    fun findByIngredient(ingredient: String): ArrayList<Dish> {
+        val dishList: ArrayList<Dish> = arrayListOf()
+        transaction {
+            Dishes.select {
+                Dishes.ingredient eq ingredient
+            }
+                .map { dishList.add(mapToDish(it)) }
+        }
+        return dishList
+    }
+
     fun save(dish: Dish) {
         return transaction {
             Dishes.insert {

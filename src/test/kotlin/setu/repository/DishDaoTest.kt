@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test
 import setu.domain.Dish
 import setu.domain.db.Dishes
 import setu.domain.repository.DishDao
-import setu.helpers.dishes
-import setu.helpers.newDishCalories
-import setu.helpers.newDishWeight
-import setu.helpers.unexistingDishName
+import setu.helpers.*
 
 class DishDaoTest {
 
@@ -75,6 +72,22 @@ class DishDaoTest {
             transaction {
                 val dishDao = populateDishTable()
                 Assertions.assertEquals(null, dishDao.findByName(unexistingDishName))
+            }
+        }
+
+        @Test
+        fun `get dish by ingredient that exists, results in a correct sleep returned`() {
+            transaction {
+                val dishDao = populateDishTable()
+                Assertions.assertEquals(true, dishDao.findByIngredient(dishes[1].ingredient).size > 0)
+            }
+        }
+
+        @Test
+        fun `get dish by ingredient that doesn't exist, results in no sleep returned`() {
+            transaction {
+                val dishDao = populateDishTable()
+                Assertions.assertEquals(0, dishDao.findByIngredient(nonexistingIngredientName).size)
             }
         }
 

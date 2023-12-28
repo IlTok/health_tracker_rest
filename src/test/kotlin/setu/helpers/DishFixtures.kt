@@ -3,6 +3,7 @@ package setu.helpers
 import setu.domain.Dish
 
 val unexistingDishName = "nonexisted dish name"
+val nonexistingIngredientName = "ingredient doesnt exists"
 val dishName1 = "dish name 1"
 val dishName2 = "dish name 2"
 val dishWeight = 120

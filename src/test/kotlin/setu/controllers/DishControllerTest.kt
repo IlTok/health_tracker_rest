@@ -31,6 +31,10 @@ class DishControllerTest {
         return Unirest.get(origin + "/api/dishes/${name}").asJson()
     }
 
+    private fun retrieveDishByIngredient(ingredient: String): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/dishes/ingredient/${ingredient}").asJson()
+    }
+
     private fun deleteDishByName(name: String): HttpResponse<String> {
         return Unirest.delete("$origin/api/dishes/$name").asString()
     }
@@ -122,6 +126,34 @@ class DishControllerTest {
             val addedProduct: Product = addProduct()
 
             val response = retrieveDishByName(unexistingDishName)
+            Assertions.assertEquals(404, response.status)
+
+            Assertions.assertEquals(204, deleteProduct(addedProduct.name))
+        }
+
+        @Test
+        fun `get dish by ingredient, returns 200 response`() {
+            val addedProduct: Product = addProduct()
+
+            val dishes = setDishes(addedProduct.name)
+
+            for (i in dishes) {
+                val retrievedDish: Dish = jsonToObject(i.body.toString())
+
+                val response = retrieveDishByIngredient(retrievedDish.ingredient)
+                Assertions.assertEquals(200, response.status)
+
+                Assertions.assertEquals(204, deleteDishByName(retrievedDish.name).status)
+            }
+
+            Assertions.assertEquals(204, deleteProduct(addedProduct.name))
+        }
+
+        @Test
+        fun `get dish by non-existent ingredient, returns 404 response`() {
+            val addedProduct: Product = addProduct()
+
+            val response = retrieveDishByName(nonexistingIngredientName)
             Assertions.assertEquals(404, response.status)
 
             Assertions.assertEquals(204, deleteProduct(addedProduct.name))
